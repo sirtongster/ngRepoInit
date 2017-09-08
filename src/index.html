@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Maind</title>
+	<base href="/">
+	<link href="/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- inject:css -->
+    <!-- endinject -->
+</head>
+<body>
+	<!-- VISTAS -->
+	<div ng-view ng-controller="GlobalController as global" ng-init="global.init()"></div>
+	<!-- inject:js -->
+    <!-- endinject -->
+</body>
+</html>
