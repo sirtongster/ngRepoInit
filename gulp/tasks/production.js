@@ -41,8 +41,8 @@ gulp.task( config.sass.name, function () {
 **	Mueve fuentes tipografia, font-awesome, bootstrap.
 */
 gulp.task( config.fonts.name, function(){
-	gulp.src( ['node_modules/font-awesome/fonts/**/*'] )
-	.pipe( gulp.dest( config.fonts.dest + '/font-awesome' ));
+	gulp.src( config.fontawesome.src )
+	.pipe( gulp.dest( config.fontawesome.dest ));
 	
 	return gulp.src( config.fonts.src )
 	.pipe( gulp.dest( config.fonts.dest ));

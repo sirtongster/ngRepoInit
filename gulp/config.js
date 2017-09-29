@@ -27,6 +27,13 @@ module.exports = {
 		],
 		dest: srv + '/public/assets/fonts'
 	},
+	fontawesome: {
+		name: 'fontsawesome',
+		src:[
+			'bower_components/font-awesome/fonts/**/*',
+		],
+		dest: srv + '/public/assets/fonts/font-awesome'
+	},
 	assets: {
 		name: 'move-assets',
 		src: [
