@@ -1,1 +1,44 @@
-<div ng-include="'views/home.html'"></div>
+<section>
+    <header>
+        <img src="assets/img/logo.png" alt="">
+    </header>
+    <div class="form-content">
+        <h3>Pago con tarjeta de Crédito</h3>
+        <form action="index_submit" method="get" accept-charset="utf-8">
+            <fieldset>
+                <span>Nº tarjeta de crédito:</span>
+                <input type="text">
+            </fieldset>
+            <fieldset>
+                <span>Vencimiento:</span>
+                <select>
+                    <option value="volvo">1</option>
+                    <option value="saab">2</option>
+                    <option value="mercedes">3</option>
+                    <option value="audi">4</option>
+                </select>
+                <select>
+                    <option value="volvo">2015</option>
+                    <option value="saab">2016</option>
+                    <option value="mercedes">2017</option>
+                    <option value="audi">2018</option>
+                </select>
+                <a href="#"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </fieldset>
+            <fieldset>
+                <span>Código de seguridad:</span>
+                <input type="text">
+                <a href="#"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </fieldset>
+            <fieldset>
+                <span>Importe a abonar:</span>
+                <input type="text">
+                <a href="#"><i class="fa fa-question-circle" aria-hidden="true"></i></a>
+            </fieldset>
+            <div class="btn-content">
+                <button class="confirmar">Confirmar</button>
+                <button>Cancelar</button>
+            </div>
+        </form>
+    </div>
+</section>
