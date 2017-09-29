@@ -5,18 +5,18 @@ if [ $# = 1 ] ; then
 
 # Elimino si los hay la imagen y los containers que quiero reemplazar
 
-	docker stop cv-catalogo
-	docker rm cv-catalogo
+	docker stop wondersoft
+	docker rm wondersoft
 
-	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1) ]; then
+	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1) ]; then
 
-		docker rmi sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1
+		docker rmi sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1
 
 	fi
 
-	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:latest) ]; then
+	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest) ]; then
 
-		docker rmi sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:latest
+		docker rmi sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest
 
 	fi
 
@@ -25,12 +25,12 @@ if [ $# = 1 ] ; then
 
 # Creo la nueva imagen
 
-	docker build -t sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1 -t sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:latest .
+	docker build -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest .
 
-#	docker build -t sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1 -t sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:latest --build-arg HTTP_PROXY=http://mciarla:camacho1@192.168.184.151:80 --build-arg HTTPS_PROXY=http://mciarla:camacho6@192.168.184.151:80 .
+#	docker build -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest --build-arg HTTP_PROXY=http://mciarla:camacho1@192.168.184.151:80 --build-arg HTTPS_PROXY=http://mciarla:camacho6@192.168.184.151:80 .
 
 # Instancio el container
-	docker run -d -p 9119:8888 --name cv-catalogo -v /usr/src/app -w /usr/src/app sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1
+	docker run -d -p 9229:6666 --name wondersoft -v /usr/src/app -w /usr/src/app sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1
 
 	rm -R dist
 	

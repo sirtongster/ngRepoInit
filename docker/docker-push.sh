@@ -5,10 +5,10 @@ if [ $# = 3 ] ; then
 
 	docker login sr-docker-xp01.corp.cablevision.com.ar:5000 -u $2 -p $3
 
-	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1) ]; then
+	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1) ]; then
 
-		docker push sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:$1
-		docker push sr-docker-xp01.corp.cablevision.com.ar:5000/cv-catalogo:latest
+		docker push sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1
+		docker push sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest
 
 	else 
 		
