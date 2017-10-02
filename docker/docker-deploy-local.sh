@@ -30,7 +30,7 @@ if [ $# = 1 ] ; then
 #	docker build -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:latest --build-arg HTTP_PROXY=http://mciarla:camacho1@192.168.184.151:80 --build-arg HTTPS_PROXY=http://mciarla:camacho6@192.168.184.151:80 .
 
 # Instancio el container
-	docker run -d -p 9229:6666 --name wondersoft -v /usr/src/app -w /usr/src/app sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1
+	docker run -d -p 9229:7777 --name wondersoft -v /usr/src/app -w /usr/src/app sr-docker-xp01.corp.cablevision.com.ar:5000/wondersoft:$1
 
 	rm -R dist
 	

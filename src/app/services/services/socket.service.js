@@ -1,4 +1,4 @@
-let socket = io.connect('http://localhost:8888', {'forceNew': true});
+let socket = io.connect('http://localhost:7777', {'forceNew': true});
 
 socket.on('messages', (data) => {
 	console.log(data);

@@ -5,6 +5,6 @@ WORKDIR /usr/src/app
 COPY dist/ /usr/src/app/dist
 COPY node_modules/ /usr/src/app/node_modules
 
-EXPOSE 6666
+EXPOSE 7777
 
 CMD node dist/server.js

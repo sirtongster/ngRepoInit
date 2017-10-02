@@ -12,13 +12,13 @@
         
         let data = {
             getInfo : getInfo,
-            getData : getData
+			getPaymentData : getPaymentData
         };
     
         return data;
         /*************************/
         
-        function getData(callback){
+        function getPaymentData(callback){
             let obj = {
                 url : '',
                 method : 'POST',
