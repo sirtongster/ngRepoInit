@@ -5,3 +5,4 @@ bower_components/
 *.orig
 npm-debug.log
 .project
+.DS_Store
