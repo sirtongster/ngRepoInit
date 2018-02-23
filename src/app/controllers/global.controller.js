@@ -3,15 +3,20 @@
 		.module('app')
 		.controller('GlobalController', GlobalController);
 	
-	// GlobalController.$inject = [];
+	GlobalController.$inject = ['getService'];
 	
-	function GlobalController(){
+	function GlobalController(getService){
 		let vm = this;
 		
 		vm.init = init;
+		vm.enviar = enviar;
 		
 		function init(){
-			
+		
+		}
+		
+		function enviar() {
+			getService.registroDePagoWS();
 		}
 	}
 })();

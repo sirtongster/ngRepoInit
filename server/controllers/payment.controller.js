@@ -1,23 +1,45 @@
-
-function getPaymentData(req, res){
-	res.sendFile('index.html', { root: 'dist/public' });
+function solicitudDePago(req, res){
+	// res.cookie('AppCookieP', req.body);
+	// res.send(req.body);
+	console.log(req.body);
 }
 
-function postPaymentData(req, res){
+function registroDePago(req, res){
 	res.cookie('AppCookieP', req.body);
-	res.send(req.cookies.AppCookieP);
-	res.sendFile('index.html', { root: 'dist/public' }, (err)=>{ if (err) throw err; });
+	console.log(req.body);
 	
-	// console.log({
-	// 	connection 	: "successful",
-	// 	status		: "200",
-	// 	data		: req.body
-	// });
+	let http = require('http');
+	
+	let options = {
+		host: 'host.com',
+		port: '80',
+		path: 'http://osb.cablevision.com.ar.RegisterCCPayment',
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+			'Content-Length': data.length
+		}
+	};
+	
+	let req = http.request(options, function(res) {
+		let msg = '';
+		
+		res.setEncoding('utf8');
+		res.on('data', function(chunk) {
+			msg += chunk;
+		});
+		res.on('end', function() {
+			console.log(JSON.parse(msg));
+		});
+	});
+	
+	req.write(data);
+	req.end();
 }
 
 const data = {
-	postPaymentData : postPaymentData,
-	getPaymentData : getPaymentData
+	solicitudDePago : solicitudDePago,
+	registroDePago : registroDePago
 };
 
 module.exports = data;

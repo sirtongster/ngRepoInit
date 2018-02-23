@@ -9,106 +9,15 @@
 	<link href="/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
     <!-- inject:css -->
     <!-- endinject -->
-    <script type="text/javascript">
-        var iframe = document.getElementById('wondersoftIframe');
-        var name = 'AppCookieP';
-        var value = 'URLREDIRECCION=http:\/\/sr-docker-xd02.corp.cablevision.com.ar:7777&TOKEN=tokenTest&PASSWORD=passwordTest&HASH=hashTest'
-        var days = 1;
-        document.cookie = createCookie(name, value, days);
-        iframe.contentWindow.postMessage(document.cookie, 'https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx');
-
-        alert("Cookie Request: " + document.cookie);
-
-        function createCookie(name, value, days) {
-            if (days) {
-                var date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                var expireDate = date.toGMTString();
-            }
-            else var expireDate = "";
-            document.cookie = name + "=" + value + "; " + "expires=" + expireDate + "; path=/" + "; HttpOnly";
-        }
-
-        function readCookie(name) {
-            var nameEQ = name + "=";
-            var ca = document.cookie.split(';');
-            for (var i = 0; i < ca.length; i++) {
-                var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
-        function getResponseCookie(event) {
-            if (event.origin !== 'https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx') {
-                alert("Cookie Response - different origin: " + event.origin);
-                return;
-            }
-            alert("Cookie Response: " + event.data);
-        }
-
-        if (window.addEventListener) {
-            window.addEventListener("message", getResponseCookie, false);
-        } else {
-            window.attachEvent("onmessage", getResponseCookie);
-        }
-    </script>
 </head>
-<body style="height:100%">
+<body style="height:100%" ng-controller="GlobalController as global">
 	<!-- VISTAS -->
 	<!--<div ng-view ng-controller="GlobalController as global" ng-init="global.init()"></div>-->
-	<iframe id="wondersoftIframe" src="https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx" frameborder="0"
-        style="width:100%; height:100%" sandbox="allow-same-origin allow-scripts allow-forms"> <!--onload="sendCookie();"-->
-        <p>Atención! Su navegador no soporta iframes.</p>
-    </iframe>
-    <script type="text/javascript">
-        window.onload = function () {
-            // var iframe = document.getElementById('wondersoftIframe');
-            // var name = 'AppCookieP';
-            // var value = 'URLREDIRECCION=http:\/\/sr-docker-xd02.corp.cablevision.com.ar:7777&TOKEN=tokenTest&PASSWORD=passwordTest&HASH=hashTest'
-            // var days = 1;
-            // document.cookie = createCookie(name, value, days);
-            // iframe.contentWindow.postMessage(document.cookie, 'https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx');
-            //
-            // alert("Cookie Request: " + document.cookie);
-            //
-            // function createCookie(name, value, days) {
-            //     if (days) {
-            //         var date = new Date();
-            //         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            //         var expireDate = date.toGMTString();
-            //     }
-            //     else var expireDate = "";
-            //     document.cookie = name + "=" + value + "; " + "expires=" + expireDate + "; path=/" + "; HttpOnly";
-            // }
-            //
-            // function readCookie(name) {
-            //     var nameEQ = name + "=";
-            //     var ca = document.cookie.split(';');
-            //     for (var i = 0; i < ca.length; i++) {
-            //         var c = ca[i];
-            //         while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-            //         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            //     }
-            //     return null;
-            // }
-            //
-            // function getResponseCookie(event) {
-            //     if (event.origin !== 'https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx') {
-            //         alert(event.origin);
-            //         return;
-            //     }
-            //     alert("Cookie Response: " + event.data);
-            // }
-            //
-            // if (window.addEventListener) {
-            //     window.addEventListener("message", getResponseCookie, false);
-            // } else {
-            //     window.attachEvent("onmessage", getResponseCookie);
-            // }
-        }
-    </script>
+	<!--<iframe id="wondersoftIframe" src="https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx" frameborder="0"-->
+        <!--style="width:100%; height:100%" sandbox="allow-same-origin allow-scripts allow-forms">-->
+        <!--<p>Atención! Su navegador no soporta iframes.</p>-->
+    <!--</iframe>-->
+    <button ng-click="global.init()">Show cookies</button>
 	<!-- inject:js -->
     <!-- endinject -->
 </body>

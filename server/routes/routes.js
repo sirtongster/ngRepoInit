@@ -8,9 +8,11 @@ router.get('/', function(req, res) {
 	res.send("Hola Mundo"); // backup en caso de que no cargue angularjs
 });
 
-router.route('/payload')
-	.get(api.getPaymentData)
-	.post(api.postPaymentData);
+router.route('/solicitudDePago')
+	.post(api.solicitudDePago);
+
+router.route('/registroDePago')
+	.post(api.registroDePago);
 
 module.exports = router;
 
