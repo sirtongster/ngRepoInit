@@ -2,9 +2,15 @@
 	angular
 		.module('app', [
 			'ngRoute',
-			'ngSanitize'
+			'ngSanitize',
+			'angular-loading-bar'
 		])
-		.config(RouteProvider);
+		.config(RouteProvider)
+		.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+			cfpLoadingBarProvider.includeSpinner 	= false;
+			cfpLoadingBarProvider.includeBar 		= false;
+			// cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading...</div>';
+		}]);
 
 	RouteProvider.$inject = ['$routeProvider', '$locationProvider'];
 

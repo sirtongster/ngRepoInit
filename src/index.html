@@ -6,18 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Wondersoft</title>
 	<base href="/">
-	<link href="/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
+	<link rel="icon" href="/assets/img/favicon.ico"/>
     <!-- inject:css -->
     <!-- endinject -->
 </head>
 <body style="height:100%" ng-controller="GlobalController as global">
 	<!-- VISTAS -->
-	<!--<div ng-view ng-controller="GlobalController as global" ng-init="global.init()"></div>-->
+	<div ng-view ng-controller="GlobalController as global" ng-init="global.init()"></div>
 	<!--<iframe id="wondersoftIframe" src="https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx" frameborder="0"-->
         <!--style="width:100%; height:100%" sandbox="allow-same-origin allow-scripts allow-forms">-->
         <!--<p>Atención! Su navegador no soporta iframes.</p>-->
     <!--</iframe>-->
-    <button ng-click="global.init()">Show cookies</button>
 	<!-- inject:js -->
     <!-- endinject -->
 </body>

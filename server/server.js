@@ -8,7 +8,6 @@ const port = process.env.PORT || 7777;
 /** SERVER **/
 let app = express();
 let server = require('http').Server(app);
-let io = require('socket.io')(server);
 
 /** CONFIG **/
 app.use(bodyParser.json());

@@ -4,10 +4,8 @@ function solicitudDePago(req, res){
 	console.log(req.body);
 }
 
-function registroDePago(req, res){
-	res.cookie('AppCookieP', req.body);
-	console.log(req.body);
-	
+function registroDePago(requ, res){
+		
 	let http = require('http');
 	
 	let options = {

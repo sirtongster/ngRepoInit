@@ -17,32 +17,112 @@
         return data;
         /*************************/
         
-        function registroDePagoWS(callback){
+        function registroDePagoWS(cardInfo){
             let obj = {
                 url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
                 method : 'POST',
                 data : {
 					"Track1y2" 				: "",
-					"CodSeguridad" 			: 648, 		// WEB
+					"CodSeguridad" 			: cardInfo.cvc || "648", 	// WEB
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: "002", 	// OPEN
+					"LineaProducto" 		: "002",// OPEN
 					"Comercio" 				: "",
 					"Terminal" 				: "",
-					"Equipo" 				: "", 		// OPEN
+					"Equipo" 				: "", 	// OPEN
 					"Moneda" 				: "",
-					"Importe" 				: "", 		// OPEN
+					"Importe" 				: "10", 	// OPEN
 					"PlanPago" 				: "",
-					"Cuotas" 				: "", 		// WEB
+					"Cuotas" 				: cardInfo.coutas || "01", 	// WEB
 					"Ingreso" 				: "",
-					"TipoOperacion" 		: "", 		// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"Anulacion" 			: "",		// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"NCuponOriginal" 		: "", 		// OPEN
-					"FechaOriginal" 		: "",		// OPEN
+					"TipoOperacion" 		: "", 	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
+					"Anulacion" 			: "",	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
+					"NCuponOriginal" 		: "", 	// OPEN
+					"FechaOriginal" 		: "",	// OPEN
 					"NroFactura" 			: "",
-					"NroTarjeta" 			: "", 		// WEB
-					"FechaVencimiento" 		: "", 		// WEB
+					"NroTarjeta" 			: cardInfo.nroTarjeta || "4507990000977787", 	// WEB
+					"FechaVencimiento" 		: cardInfo.vencimiento || "1905", 	// WEB
+					"FechaCompra" 			: "",
+					"HoraCompra" 			: "",
+					"NroCupon" 				: "",
+					"CodRespuesta" 			: "",
+					"Respuesta" 			: "",
+					"NroAutorizacion"		: "",
+					"NroTrace" 				: "",
+					"TipoAutorizacion" 		: "",
+					"NombreTarjeta" 		: "",
+					"Operador" 				: "",
+					"Titular" 				: "",
+					"Retrieval" 			: "",
+					"NroCuenta" 			: "",
+					"TipoDocumento" 		: "",
+					"Documento" 			: "",
+					"FechaPosdatada" 		: "",
+					"TipoCuenta" 			: "",
+					"Reservado" 			: "",
+					"Codigotarjeta" 		: "",
+					"LongAuxiliar" 			: "",
+					"Auxiliar" 				: "",
+					"IdentificacionCliente" : "", 	// OPEN
+					"PinWorkingKey" 		: "",
+					"ImporteAdicional" 		: "",
+					"RespValDatosTit" 		: "",
+					"NombrePlanPago" 		: "",
+					"Lote" 					: "",
+					"TelDireccion" 			: "",
+					"DatoAdicional59" 		: "",
+					"token" 				: "",
+					"WKeyEncriptacion" 		: "",
+					"Bloque" 				: "",
+					"IDCLIENTE2" 			: "",
+					"DatosAdicionales" 		: "",
+					"Empresa" 				: "",
+					"PosMkEncriptacion" 	: "",
+					"EMVFallback" 			: "",
+					"BitMapAdicional" 		: "",
+					"MACREAL" 				: "",
+					"IDTerminal" 			: "",
+					"Filler" 				: ""
+				},
+                happyResponse : (res) => {
+                    
+                },
+                unhappyResponse : (err) => {
+					console.log('****** ANULACION ******');
+					anulacionDePagoWS();
+                }
+            };
+
+            return ajaxService.getData(obj);
+		}
+		
+		function anulacionDePagoWS(){
+			let obj = {
+                url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
+                method : 'DELETE',
+                data : {
+					"Track1y2" 				: "",
+					"CodSeguridad" 			: 648, 	// WEB
+					"CodServicio" 			: "",
+					"Version" 				: "",
+					"Servicio" 				: "",
+					"LineaProducto" 		: "002",// OPEN
+					"Comercio" 				: "",
+					"Terminal" 				: "",
+					"Equipo" 				: "", 	// OPEN
+					"Moneda" 				: "",
+					"Importe" 				: "", 	// OPEN
+					"PlanPago" 				: "",
+					"Cuotas" 				: "01", // WEB
+					"Ingreso" 				: "",
+					"TipoOperacion" 		: "", 	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
+					"Anulacion" 			: "",	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
+					"NCuponOriginal" 		: "", 	// OPEN
+					"FechaOriginal" 		: "",	// OPEN
+					"NroFactura" 			: "",
+					"NroTarjeta" 			: "", 	// WEB
+					"FechaVencimiento" 		: "", 	// WEB
 					"FechaCompra" 			: "",
 					"HoraCompra" 			: "",
 					"NroCupon" 				: "",
@@ -94,6 +174,6 @@
             };
 
             return ajaxService.getData(obj);
-        }
+		}
     }
 })();

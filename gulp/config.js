@@ -13,7 +13,7 @@ module.exports = {
 		src: [
 			src + '/assets/css/main.scss',
 			'bower_components/animate.css/animate.css',
-			'bower_components/simple-grid/src/simple-grid.css'
+			'bower_components/angular-loading-bar/build/loading-bar.min.css'
 		],
 		outputName: 'main.css',
 		dest: srv + '/public/assets/stylesheets'
@@ -22,8 +22,7 @@ module.exports = {
 		name: 'move-fonts',
 		src:[
 			src + '/assets/fonts/**/*',
-			'bower_components/bootstrap-sass/assets/fonts/**/*',
-			'bower_components/materialize-css/fonts/**/*'
+			'bower_components/bootstrap-sass/assets/fonts/**/*'
 		],
 		dest: srv + '/public/assets/fonts'
 	},
@@ -32,7 +31,7 @@ module.exports = {
 		src:[
 			'bower_components/font-awesome/fonts/**/*',
 		],
-		dest: srv + '/public/assets/fonts/font-awesome'
+		dest: srv + '/public/assets/fonts/'
 	},
 	assets: {
 		name: 'move-assets',
@@ -59,9 +58,8 @@ module.exports = {
 			'bower_components/angular/angular.min.js',
 			'bower_components/angular-route/angular-route.min.js',
 			'bower_components/angular-sanitize/angular-sanitize.min.js',
-			'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-			'bower_components/socket.io-client/dist/socket.io.js',
-			'node_modules/requirejs/require.js',
+			'bower_components/angular-loading-bar/build/loading-bar.min.js',
+			'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'
 		],
 		outputName: 'vendors.min.js',
 		dest: srv + '/public/assets/javascripts'
