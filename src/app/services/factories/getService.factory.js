@@ -23,26 +23,26 @@
                 method : 'POST',
                 data : {
 					"Track1y2" 				: "",
-					"CodSeguridad" 			: cardInfo.cvc || "648", 	// WEB
+					"CodSeguridad" 			: (cardInfo.cvc) ? cardInfo.cvc : "648",
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: "002",// OPEN
+					"LineaProducto" 		: "004",// OPEN
 					"Comercio" 				: "",
 					"Terminal" 				: "",
 					"Equipo" 				: "", 	// OPEN
 					"Moneda" 				: "",
-					"Importe" 				: "10", 	// OPEN
+					"Importe" 				: "000000001000", 	// OPEN
 					"PlanPago" 				: "",
-					"Cuotas" 				: cardInfo.coutas || "01", 	// WEB
+					"Cuotas" 				: (cardInfo.coutas) ? cardInfo.coutas : "01",
 					"Ingreso" 				: "",
 					"TipoOperacion" 		: "", 	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
 					"Anulacion" 			: "",	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
 					"NCuponOriginal" 		: "", 	// OPEN
 					"FechaOriginal" 		: "",	// OPEN
 					"NroFactura" 			: "",
-					"NroTarjeta" 			: cardInfo.nroTarjeta || "4507990000977787", 	// WEB
-					"FechaVencimiento" 		: cardInfo.vencimiento || "1905", 	// WEB
+					"NroTarjeta" 			: (cardInfo.nroTarjeta) ? cardInfo.nroTarjeta : "4507990000977787",
+					"FechaVencimiento" 		: (cardInfo.vencimiento) ? cardInfo.vencimiento : "1905",
 					"FechaCompra" 			: "",
 					"HoraCompra" 			: "",
 					"NroCupon" 				: "",

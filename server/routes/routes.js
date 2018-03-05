@@ -9,11 +9,12 @@ router.get('/', function(req, res) {
 });
 
 router.route('/solicitudDePago')
-	.post(api.solicitudDePago);
+	// .get(api.solicitudDePago)
+	.post(function(req, res){
+		res.sendFile(path.join(__dirname, '../../public', 'index.html'));
+	});
 
 router.route('/registroDePago')
 	.post(api.registroDePago);
 
 module.exports = router;
-
-

@@ -1,7 +1,7 @@
+let path = require('path');
+
 function solicitudDePago(req, res){
-	// res.cookie('AppCookieP', req.body);
-	// res.send(req.body);
-	console.log(req.body);
+	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
 
 function registroDePago(requ, res){
