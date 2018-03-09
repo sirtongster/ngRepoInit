@@ -3,9 +3,9 @@
 		.module('app')
 		.controller('GlobalController', GlobalController);
 	
-	GlobalController.$inject = ['getService', 'form'];
+	GlobalController.$inject = ['getService'];
 	
-	function GlobalController(getService, form){
+	function GlobalController(getService){
 		let vm = this;
 		
 		vm.cardInfo = {};
@@ -14,16 +14,19 @@
 		vm.enviar = enviar;
 		
 		function init(){
-			
+			getService.getPaymentData();
 		}
 		
-		function enviar() {
-			if((vm.cardInfo.nroTarjeta && vm.cardInfo.vencimiento) && vm.cardInfo.cvc){
-				form.cardValidator(vm.cardInfo, (cardInfo) => {
-					console.log(cardInfo);
-					getService.registroDePagoWS(cardInfo);
-				});
-			}
+		function enviar(e) {
+			e.stopPropagation();
+			getService.registroDePagoWS({
+				cvc 		: (parseInt(vm.cardInfo.cvc)) 			? vm.cardInfo.cvc : "",
+				cuotas 		: (parseInt(vm.cardInfo.cuotas) < 10) 	? "0" + vm.cardInfo.cuotas : vm.cardInfo.cuotas,
+				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta : "",
+				vencimiento : (parseInt(vm.cardInfo.vencimiento)) 	? vm.cardInfo.vencimiento : ""
+			}, (data) => {
+				
+			});
 		}
 	}
 })();

@@ -1,43 +1,66 @@
 let path = require('path');
+let info = {};
 
-function solicitudDePago(req, res){
+// GET request
+function sendDataToFront(req, res){
+	console.log(info);
 	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
+// POST request
+function solicitudDePago(req, res){
+	info = req.body;
+}
 
-function registroDePago(requ, res){
-		
+function getInfo(req, res){
+	res.send(info);
+}
+
+function registroDePago(data, callback){
 	let http = require('http');
 	
 	let options = {
-		host: 'host.com',
-		port: '80',
-		path: 'http://osb.cablevision.com.ar.RegisterCCPayment',
+		protocol: 'http:',
+		host: 'sr-osb12-ad02',
+		port: '10001',
+		path: '/paymentManagement/paymentCC',
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json; charset=utf-8',
-			'Content-Length': data.length
+			'Accept': 'application/json'
 		}
 	};
+
 	
-	let req = http.request(options, function(res) {
-		let msg = '';
-		
-		res.setEncoding('utf8');
-		res.on('data', function(chunk) {
-			msg += chunk;
-		});
-		res.on('end', function() {
-			console.log(JSON.parse(msg));
-		});
+	let req = http.request(options, (res) => {	
+		response(res, callback);
 	});
-	
-	req.write(data);
+
+	req.on('error', (e) => { console.error(`problem with request: ${e.message}`) });
+	req.write(JSON.stringify(data.body));
 	req.end();
+}
+
+function response(res, callback){
+	let response = '';
+
+	res.on('data', (chunk) => {
+		response = response + chunk.toString();
+	});
+	res.on('end', () => {
+	    try {
+			callback.send(response);
+	    	console.log(response);
+	    } catch (e) {
+	    	console.error(e.message);
+	    }
+	});
 }
 
 const data = {
 	solicitudDePago : solicitudDePago,
-	registroDePago : registroDePago
+	registroDePago : registroDePago,
+	sendDataToFront : sendDataToFront,
+	getInfo : getInfo
 };
 
 module.exports = data;

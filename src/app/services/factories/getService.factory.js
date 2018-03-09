@@ -7,42 +7,58 @@
     getService.$inject = ['ajaxService'];
 
     function getService(ajaxService){
-        let global;
-        let host = 'http://' + location.host;
+        let openInfo = {};
+        let host = '//' + location.host;
         
         let data = {
-			registroDePagoWS : registroDePagoWS
+			registroDePagoWS : registroDePagoWS,
+			getPaymentData : getPaymentData
         };
     
         return data;
         /*************************/
-        
-        function registroDePagoWS(cardInfo){
+		function getPaymentData(){
+			let obj = {
+                url : host + '/pago/registroDePago',
+                method : 'GET',
+                happyResponse : (res) => {
+                    openInfo = res;
+                },
+                unhappyResponse : (err) => {
+					console.log('****** ANULACION ******');
+                }
+            };
+
+            return ajaxService.getData(obj);
+		}
+		
+        function registroDePagoWS(cardInfo, callback){
+			console.log(cardInfo);
             let obj = {
-                url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
+                url : host + '/pago/registroDePago',
                 method : 'POST',
                 data : {
 					"Track1y2" 				: "",
-					"CodSeguridad" 			: (cardInfo.cvc) ? cardInfo.cvc : "648",
+					"CodSeguridad" 			: (cardInfo.cvc) ? cardInfo.cvc : 648,
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: "004",// OPEN
+					"LineaProducto" 		: (openInfo.lineaproducto) ? openInfo.lineaproducto : "",
 					"Comercio" 				: "",
 					"Terminal" 				: "",
-					"Equipo" 				: "", 	// OPEN
+					"Equipo" 				: (openInfo.equipo) ? openInfo.equipo : "",
 					"Moneda" 				: "",
-					"Importe" 				: "000000001000", 	// OPEN
+					"Importe" 				: (openInfo.importe) ? openInfo.importe : "",
 					"PlanPago" 				: "",
-					"Cuotas" 				: (cardInfo.coutas) ? cardInfo.coutas : "01",
+					"Cuotas" 				: (cardInfo.cuotas) ? cardInfo.cuotas : "",
 					"Ingreso" 				: "",
-					"TipoOperacion" 		: "", 	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"Anulacion" 			: "",	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"NCuponOriginal" 		: "", 	// OPEN
-					"FechaOriginal" 		: "",	// OPEN
+					"TipoOperacion" 		: "",
+					"Anulacion" 			: "",
+					"NCuponOriginal" 		: (openInfo.cuponoriginal) ? openInfo.cuponoriginal : "",
+					"FechaOriginal" 		: (openInfo.fechaoriginal) ? openInfo.fechaoriginal : "",
 					"NroFactura" 			: "",
-					"NroTarjeta" 			: (cardInfo.nroTarjeta) ? cardInfo.nroTarjeta : "4507990000977787",
-					"FechaVencimiento" 		: (cardInfo.vencimiento) ? cardInfo.vencimiento : "1905",
+					"NroTarjeta" 			: (cardInfo.nroTarjeta) ? cardInfo.nroTarjeta : "",
+					"FechaVencimiento" 		: (cardInfo.vencimiento) ? cardInfo.vencimiento : "",
 					"FechaCompra" 			: "",
 					"HoraCompra" 			: "",
 					"NroCupon" 				: "",
@@ -50,7 +66,7 @@
 					"Respuesta" 			: "",
 					"NroAutorizacion"		: "",
 					"NroTrace" 				: "",
-					"TipoAutorizacion" 		: "",
+					"TipoAutorizacion" 		: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
 					"NombreTarjeta" 		: "",
 					"Operador" 				: "",
 					"Titular" 				: "",
@@ -64,7 +80,7 @@
 					"Codigotarjeta" 		: "",
 					"LongAuxiliar" 			: "",
 					"Auxiliar" 				: "",
-					"IdentificacionCliente" : "", 	// OPEN
+					"IdentificacionCliente" : (openInfo.idcliente) ? openInfo.idcliente : "",
 					"PinWorkingKey" 		: "",
 					"ImporteAdicional" 		: "",
 					"RespValDatosTit" 		: "",
@@ -86,11 +102,14 @@
 					"Filler" 				: ""
 				},
                 happyResponse : (res) => {
-                    
+                    callback({
+						respuesta 	: res.Response,
+						respCode	: res.ResponseCode
+					});
                 },
                 unhappyResponse : (err) => {
 					console.log('****** ANULACION ******');
-					anulacionDePagoWS();
+					// anulacionDePagoWS();
                 }
             };
 

@@ -9,12 +9,11 @@ router.get('/', function(req, res) {
 });
 
 router.route('/solicitudDePago')
-	// .get(api.solicitudDePago)
-	.post(function(req, res){
-		res.sendFile(path.join(__dirname, '../../public', 'index.html'));
-	});
+	.get(api.sendDataToFront)
+	.post(api.solicitudDePago);
 
 router.route('/registroDePago')
+	.get(api.getInfo)
 	.post(api.registroDePago);
 
 module.exports = router;

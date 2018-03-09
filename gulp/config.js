@@ -43,14 +43,6 @@ module.exports = {
 		],
 		dest: srv + '/public/assets'
 	},
-	accessassets: {
-		name: "NON",
-		src: [
-			src + '/robots.txt',
-			src + '/.htaccess'
-		],
-		dest: srv + '/public'
-	},
 	vendors: {
 		name: 'vendors-js',
 		src: [

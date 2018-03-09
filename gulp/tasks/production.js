@@ -54,11 +54,8 @@ gulp.task( config.fonts.name, function(){
 */
 gulp.task( config.assets.name, function(){
 	
-	gulp.src( config.assets.src )
+	return gulp.src( config.assets.src )
 	.pipe(gulp.dest( config.assets.dest ));
-
-	return gulp.src( config.accessassets.src )
-	.pipe(gulp.dest( config.accessassets.dest ));
 	
 });
 
@@ -183,5 +180,5 @@ gulp.task('default', function(callback){
 		config.appjs.name,
 		config.fonts.name,
 		config.assets.name
-	], config.inject.name, 'start', 'watch', callback);
+	], config.inject.name, callback);
 });

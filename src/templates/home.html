@@ -1,75 +1,115 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12 col-md-4">
-            <div class="panel panel-default credit-card-box">
-                <div class="panel-body">
-                    <form role="form" id="payment-form" method="POST" action="javascript:void(0);">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label for="cardNumber">Número de tarjeta: </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                        <input 
-                                            type="number"
-                                            ng-model="global.cardInfo.nroTarjeta"
-                                            class="form-control"
-                                            name="cardNumber"
-                                            placeholder="xxxx-xxxx-xxxx-xxxx"
-                                            autocomplete="cc-number"
-                                            required autofocus
-                                        />
-                                    </div>
-                                </div>                            
-                            </div>
+        <div class="main-login main-center">
+        <h5>Sign up once and watch any of our free demos.</h5>
+            <div class="wrapper">
+                
+                <div class="form-group">
+                    <label for="creditcard" class="cols-sm-2 control-label">Número de tarjeta</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-credit-card-alt fa" aria-hidden="true"></i>
+                            </span>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                name="creditcard"
+                                id="creditcard"
+                                maxlength="16"
+                                ng-model="global.cardInfo.nroTarjeta"
+                                placeholder="xxxx-xxxx-xxxx-xxxx"
+                            />
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label for="vencimiento"><span class="hidden-xs">Vencimiento: </span></label>
-                                    <input 
-                                        type="number"
-                                        ng-model="global.cardInfo.vencimiento"
-                                        maxlength="4"
-                                        class="form-control" 
-                                        name="vencimiento"
-                                        placeholder="MMAA"
-                                        autocomplete="cc-exp"
-                                        required 
-                                    />
-                                </div>
-                            </div>
+                        <span ng-show="creditcard.$touched && creditcard.$invalid">The name is required.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="expiration" class="cols-sm-2 control-label">Fecha de vencimiento</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar fa" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="expiration"
+                                id="expiration"
+                                maxlength="4"
+                                ng-model="global.cardInfo.vencimiento"
+                                placeholder="AAMM"/>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label for="cvc">Código de seguridad: </label>
-                                    <input 
-                                        type="password"
-                                        ng-model="global.cardInfo.cvc"
-                                        maxlength="3"
-                                        class="form-control"
-                                        name="cvc"
-                                        placeholder="CVC"
-                                        autocomplete="cc-csc"
-                                        required
-                                    />
-                                </div>
-                            </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-6">
+                    <label for="cvc" class="cols-sm-2 control-label">CVC</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock fa" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="password"
+                                class="form-control"
+                                name="cvc"
+                                id="cvc"
+                                maxlength="3"
+                                ng-model="global.cardInfo.cvc"
+                                placeholder="Código de seguridad"/>
                         </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <button class="subscribe btn btn-primary btn-lg btn-block" type="button" ng-click="global.enviar()">Solicitar Pago</button>
-                            </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-xs-6">
+                    <label for="dues" class="cols-sm-2 control-label">Cuotas</label>
+                    <div class="cols-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-lock fa-lg" aria-hidden="true"></i>
+                            </span>
+                            <select
+                                name="dues"
+                                id="dues"
+                                class="form-control"
+                                ng-model="global.cardInfo.cuotas"
+                            >
+                                <option value="1" selected>01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <!-- <input
+                                type="password"
+                                class="form-control"
+                                name="dues"
+                                id="dues"
+                                placeholder="Cuotas"/> -->
                         </div>
-                        <div class="row" style="display:none;">
-                            <div class="col-xs-12">
-                                <p class="payment-errors"></p>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <button
+                        id="button"
+                        class="btn btn-primary btn-lg btn-block login-button"
+                        ng-click="global.enviar($event)"
+                        ng-disabled="form.$invalid"
+                    >
+                            Register
+                    </button>
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
 </div>
