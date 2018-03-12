@@ -29,17 +29,14 @@ function registroDePago(data, callback){
 			'Accept': 'application/json'
 		}
 	};
-	const response = (res) => { 
+	const response = (res, callback) => { 
 		let response = '';
-		res.on('data', (chunk) => { response = response + chunk.toString() });
+		res.on('data', (chunk) => {
+			response = (res.statusCode === 200) ? console.log(chunk.toString()) : console.log('404');
+			callback(response);
+		});
 		res.on('end', () => {
-			try {
-				console.log('la putaaaaaaaaaa');
-				callback.send(response);
-				console.info(response);
-			} catch (e) {
-				console.error(e.message);
-			}
+			console.log('**** RESPONSE END ****');
 		});
 	};
 
