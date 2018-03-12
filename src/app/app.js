@@ -7,8 +7,8 @@
 		])
 		.config(RouteProvider)
 		.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-			cfpLoadingBarProvider.includeSpinner 	= false;
-			cfpLoadingBarProvider.includeBar 		= false;
+			cfpLoadingBarProvider.includeSpinner 	= true;
+			cfpLoadingBarProvider.includeBar 		= true;
 			// cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading...</div>';
 		}]);
 

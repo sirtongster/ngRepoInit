@@ -25,7 +25,8 @@
 				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta : "",
 				vencimiento : (parseInt(vm.cardInfo.vencimiento)) 	? vm.cardInfo.vencimiento : ""
 			}, (data) => {
-				
+				console.log(data.respuesta);
+				console.log(data.respCode);
 			});
 		}
 	}

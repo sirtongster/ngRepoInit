@@ -7,7 +7,7 @@
     getService.$inject = ['ajaxService'];
 
     function getService(ajaxService){
-        let openInfo = {};
+        let OPENINFO = {};
         let host = '//' + location.host;
         
         let data = {
@@ -22,7 +22,7 @@
                 url : host + '/pago/registroDePago',
                 method : 'GET',
                 happyResponse : (res) => {
-                    openInfo = res;
+                    OPENINFO = res;
                 },
                 unhappyResponse : (err) => {
 					console.log('****** ANULACION ******');
@@ -33,32 +33,31 @@
 		}
 		
         function registroDePagoWS(cardInfo, callback){
-			console.log(cardInfo);
             let obj = {
                 url : host + '/pago/registroDePago',
                 method : 'POST',
                 data : {
 					"Track1y2" 				: "",
-					"CodSeguridad" 			: (cardInfo.cvc) ? cardInfo.cvc : 648,
+					"CodSeguridad" 			: (cardInfo.cvc) 				? cardInfo.cvc : "",
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: (openInfo.lineaproducto) ? openInfo.lineaproducto : "",
+					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "",
 					"Comercio" 				: "",
 					"Terminal" 				: "",
-					"Equipo" 				: (openInfo.equipo) ? openInfo.equipo : "",
+					"Equipo" 				: (OPENINFO.EQUIPO) 			? OPENINFO.EQUIPO : "",
 					"Moneda" 				: "",
-					"Importe" 				: (openInfo.importe) ? openInfo.importe : "",
+					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "",
 					"PlanPago" 				: "",
-					"Cuotas" 				: (cardInfo.cuotas) ? cardInfo.cuotas : "",
+					"Cuotas" 				: (cardInfo.CUOTAS) 			? cardInfo.CUOTAS : "",
 					"Ingreso" 				: "",
-					"TipoOperacion" 		: "",
+					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "",
 					"Anulacion" 			: "",
-					"NCuponOriginal" 		: (openInfo.cuponoriginal) ? openInfo.cuponoriginal : "",
-					"FechaOriginal" 		: (openInfo.fechaoriginal) ? openInfo.fechaoriginal : "",
+					"NCuponOriginal" 		: (OPENINFO.CUPONORIGINAL) 		? OPENINFO.CUPONORIGINAL : "",
+					"FechaOriginal" 		: (OPENINFO.FECHAORIGINAL) 		? OPENINFO.FECHAORIGINAL : "",
 					"NroFactura" 			: "",
-					"NroTarjeta" 			: (cardInfo.nroTarjeta) ? cardInfo.nroTarjeta : "",
-					"FechaVencimiento" 		: (cardInfo.vencimiento) ? cardInfo.vencimiento : "",
+					"NroTarjeta" 			: (cardInfo.nroTarjeta) 		? cardInfo.nroTarjeta : "",
+					"FechaVencimiento" 		: (cardInfo.vencimiento) 		? cardInfo.vencimiento : "",
 					"FechaCompra" 			: "",
 					"HoraCompra" 			: "",
 					"NroCupon" 				: "",
@@ -66,7 +65,7 @@
 					"Respuesta" 			: "",
 					"NroAutorizacion"		: "",
 					"NroTrace" 				: "",
-					"TipoAutorizacion" 		: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
+					"TipoAutorizacion" 		: (cardInfo.tipoautorizacion) 	? cardInfo.tipoautorizacion : "",
 					"NombreTarjeta" 		: "",
 					"Operador" 				: "",
 					"Titular" 				: "",
@@ -80,7 +79,7 @@
 					"Codigotarjeta" 		: "",
 					"LongAuxiliar" 			: "",
 					"Auxiliar" 				: "",
-					"IdentificacionCliente" : (openInfo.idcliente) ? openInfo.idcliente : "",
+					"IdentificacionCliente" : (OPENINFO.ID_CLIENTE) 		? OPENINFO.ID_CLIENTE : "",
 					"PinWorkingKey" 		: "",
 					"ImporteAdicional" 		: "",
 					"RespValDatosTit" 		: "",
@@ -103,8 +102,8 @@
 				},
                 happyResponse : (res) => {
                     callback({
-						respuesta 	: res.Response,
-						respCode	: res.ResponseCode
+						respuesta 	: res.DataArea.Payment.Response,
+						respCode	: res.DataArea.Payment.ResponseCode
 					});
                 },
                 unhappyResponse : (err) => {
