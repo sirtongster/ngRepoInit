@@ -29,9 +29,10 @@ function registroDePagoWS(req, res){
 	const response = (_res) => {
 		_res.on('data', (chunk) => {
 			let response = '';
-			response = 	(_res.statusCode === 200) ? chunk.toString() : 
-						(_res.statusCode === 300) ? '302' :
-						(_res.statusCode !== 404) ? '404' : '500';
+			response = chunk.toString();
+			// response = 	(_res.statusCode === 200) ? chunk.toString() : 
+			// 			(_res.statusCode === 300) ? '302' :
+			// 			(_res.statusCode === 404) ? '404' : '500';
 
 			console.log(response);
 			res.send(response);

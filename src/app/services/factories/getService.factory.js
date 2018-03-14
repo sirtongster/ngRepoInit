@@ -33,6 +33,7 @@
 		}
 		
         function registroDePagoWS(cardInfo, callback){
+			OPENINFO.TIPOOPERACION = validatorFactory.openDataValidator(OPENINFO);
             let obj = {
                 url : host + '/pago/registroDePagoWS',
                 method : 'POST',
@@ -42,16 +43,16 @@
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "004",
+					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "",
 					"Comercio" 				: "",
 					"Terminal" 				: "",
 					"Equipo" 				: (OPENINFO.EQUIPO) 			? OPENINFO.EQUIPO : "",
 					"Moneda" 				: "",
-					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "000000001000",
+					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "",
 					"PlanPago" 				: "",
 					"Cuotas" 				: (cardInfo.cuotas) 			? cardInfo.cuotas : "",
 					"Ingreso" 				: "",
-					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "1",
+					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "",
 					"Anulacion" 			: "",
 					"NCuponOriginal" 		: (OPENINFO.CUPONORIGINAL) 		? OPENINFO.CUPONORIGINAL : "",
 					"FechaOriginal" 		: (OPENINFO.FECHAORIGINAL) 		? OPENINFO.FECHAORIGINAL : "",

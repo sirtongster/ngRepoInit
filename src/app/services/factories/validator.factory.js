@@ -9,7 +9,8 @@
     function validatorFactory(){       
         let data = {
             ajaxResponseValidator : ajaxResponseValidator,
-            paymentDataValidator : paymentDataValidator
+            paymentDataValidator : paymentDataValidator,
+            openDataValidator : openDataValidator
         };
     
         return data;
@@ -30,6 +31,12 @@
 
         function paymentDataValidator(data){
 
+        }
+
+        function openDataValidator(data){
+            return  (data.TIPOOPERACION === 'C') ? '1' :
+                    (data.TIPOOPERACION === 'A') ? '1' : 
+                    (data.TIPOOPERACION === 'D') ? '3' : "";
         }
     }
 })();
