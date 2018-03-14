@@ -6,14 +6,16 @@
 			'angular-loading-bar'
 		])
 		.config(RouteProvider)
-		.config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-			cfpLoadingBarProvider.includeSpinner 	= true;
-			cfpLoadingBarProvider.includeBar 		= true;
-			// cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading...</div>';
-		}]);
+		.config(LoadingProvider);
 
+	LoadingProvider.$inject = ['cfpLoadingBarProvider'];
 	RouteProvider.$inject = ['$routeProvider', '$locationProvider'];
 
+	function LoadingProvider(cfpLoadingBarProvider){
+		cfpLoadingBarProvider.includeSpinner 	= true;
+		cfpLoadingBarProvider.includeBar 		= true;
+		// cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading...</div>';
+	}
 	function RouteProvider($routeProvider, $locationProvider){
 		$routeProvider
 			.when('/', {
@@ -22,10 +24,10 @@
 				templateUrl: 'templates/home.html'
 			})
 			// Other
-			.when('/other', {
-				controller: 'OtherController',
-				controllerAs: 'other',
-				templateUrl: 'templates/other.html'
+			.when('/error', {
+				controller: 'ErrorController',
+				controllerAs: 'error',
+				templateUrl: 'templates/error.html'
 			})
 			.otherwise({
 				redirectTo: '/'

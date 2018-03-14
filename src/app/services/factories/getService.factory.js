@@ -4,22 +4,22 @@
         .module('app')
         .factory('getService', getService);
 
-    getService.$inject = ['ajaxService'];
+    getService.$inject = ['ajaxService', 'validatorFactory'];
 
-    function getService(ajaxService){
+    function getService(ajaxService, validatorFactory){
         let OPENINFO = {};
         let host = '//' + location.host;
         
         let data = {
 			registroDePagoWS : registroDePagoWS,
-			getPaymentData : getPaymentData
+			infoDePagoWS : infoDePagoWS
         };
     
         return data;
         /*************************/
-		function getPaymentData(){
+		function infoDePagoWS(){
 			let obj = {
-                url : host + '/pago/registroDePago',
+                url : host + '/pago/registroDePagoWS',
                 method : 'GET',
                 happyResponse : (res) => {
                     OPENINFO = res;
@@ -34,7 +34,7 @@
 		
         function registroDePagoWS(cardInfo, callback){
             let obj = {
-                url : host + '/pago/registroDePago',
+                url : host + '/pago/registroDePagoWS',
                 method : 'POST',
                 data : {
 					"Track1y2" 				: "",
@@ -42,16 +42,16 @@
 					"CodServicio" 			: "",
 					"Version" 				: "",
 					"Servicio" 				: "",
-					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "",
+					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "004",
 					"Comercio" 				: "",
 					"Terminal" 				: "",
 					"Equipo" 				: (OPENINFO.EQUIPO) 			? OPENINFO.EQUIPO : "",
 					"Moneda" 				: "",
-					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "",
+					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "000000001000",
 					"PlanPago" 				: "",
-					"Cuotas" 				: (cardInfo.CUOTAS) 			? cardInfo.CUOTAS : "",
+					"Cuotas" 				: (cardInfo.cuotas) 			? cardInfo.cuotas : "",
 					"Ingreso" 				: "",
-					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "",
+					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "1",
 					"Anulacion" 			: "",
 					"NCuponOriginal" 		: (OPENINFO.CUPONORIGINAL) 		? OPENINFO.CUPONORIGINAL : "",
 					"FechaOriginal" 		: (OPENINFO.FECHAORIGINAL) 		? OPENINFO.FECHAORIGINAL : "",
@@ -101,10 +101,12 @@
 					"Filler" 				: ""
 				},
                 happyResponse : (res) => {
-                    callback({
-						respuesta 	: res.DataArea.Payment.Response,
-						respCode	: res.DataArea.Payment.ResponseCode
-					});
+
+					(validatorFactory.ajaxResponseValidator(res)) ? 
+						callback({
+							respuesta 	: res.DataArea.Payment.Response,
+							respCode	: res.DataArea.Payment.ResponseCode
+						}) : callback('ANULACION');
                 },
                 unhappyResponse : (err) => {
 					console.log('****** ANULACION ******');

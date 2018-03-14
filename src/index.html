@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" ng-app="app" style="height:100%">
+<html lang="es" ng-app="app">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,13 +10,9 @@
     <!-- inject:css -->
     <!-- endinject -->
 </head>
-<body style="height:100%" ng-controller="GlobalController as global">
+<body>
 	<!-- VISTAS -->
 	<div ng-view ng-controller="GlobalController as global" ng-init="global.init()"></div>
-	<!--<iframe id="wondersoftIframe" src="https://172.21.159.2:8457/WondersoftAutorizacionPagos.aspx" frameborder="0"-->
-        <!--style="width:100%; height:100%" sandbox="allow-same-origin allow-scripts allow-forms">-->
-        <!--<p>Atención! Su navegador no soporta iframes.</p>-->
-    <!--</iframe>-->
 	<!-- inject:js -->
     <!-- endinject -->
 </body>

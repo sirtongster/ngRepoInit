@@ -12,7 +12,7 @@ module.exports = {
 		name: 'sass',
 		src: [
 			src + '/assets/css/main.scss',
-			'bower_components/animate.css/animate.css',
+			'bower_components/animate.css/animate.min.css',
 			'bower_components/angular-loading-bar/build/loading-bar.min.css'
 		],
 		outputName: 'main.css',
@@ -39,7 +39,7 @@ module.exports = {
 			src + '/assets/**/*',
 			'!' + src + '/assets/{css,css/**}',
 			'!' + src + '/assets/{fonts,fonts/**}',
-			'!' + src + '/assets/{javascript,javascript/**}'
+			'!' + src + '/assets/{js,js/**}'
 		],
 		dest: srv + '/public/assets'
 	},
@@ -85,7 +85,8 @@ module.exports = {
 		target: src + '/index.html',
 		src: [
 			srv + '/public/assets/stylesheets/main.css',
-			srv + '/public/assets/stylesheets/animate.css',
+			srv + '/public/assets/stylesheets/animate.min.css',
+			srv + '/public/assets/stylesheets/loading-bar.min.css',
 			srv + '/public/assets/javascripts/vendors.min.js',
 			srv + '/public/assets/javascripts/app.min.js'
 		],

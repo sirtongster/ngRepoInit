@@ -3,9 +3,9 @@
 		.module('app')
 		.controller('GlobalController', GlobalController);
 	
-	GlobalController.$inject = ['getService'];
+	GlobalController.$inject = ['cfpLoadingBar', 'getService'];
 	
-	function GlobalController(getService){
+	function GlobalController(cfpLoadingBar, getService){
 		let vm = this;
 		
 		vm.cardInfo = {};
@@ -14,19 +14,19 @@
 		vm.enviar = enviar;
 		
 		function init(){
-			getService.getPaymentData();
+			cfpLoadingBar.start();
+			getService.infoDePagoWS();
 		}
 		
 		function enviar(e) {
 			e.stopPropagation();
 			getService.registroDePagoWS({
 				cvc 		: (parseInt(vm.cardInfo.cvc)) 			? vm.cardInfo.cvc : "",
-				cuotas 		: (parseInt(vm.cardInfo.cuotas) < 10) 	? "0" + vm.cardInfo.cuotas : vm.cardInfo.cuotas,
+				cuotas 		: (parseInt(vm.cardInfo.cuotas))	 	? vm.cardInfo.cuotas : vm.cardInfo.cuotas,
 				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta : "",
 				vencimiento : (parseInt(vm.cardInfo.vencimiento)) 	? vm.cardInfo.vencimiento : ""
 			}, (data) => {
-				console.log(data.respuesta);
-				console.log(data.respCode);
+				cfpLoadingBar.complete();
 			});
 		}
 	}

@@ -1,21 +1,18 @@
 let path = require('path');
 let info = {};
 
-// GET request
-function sendDataToFront(req, res){
-	console.log(info);
-	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
-}
 // POST request
 function solicitudDePago(req, res){
 	info = req.body;
+	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
 
-function getInfo(req, res){
+function infoDePagoWS(req, res){
 	res.send(info);
 }
 
-function registroDePago(data, callback){
+function registroDePagoWS(req, res){
+	console.log(req.body);
 	const http = require('http');
 	
 	const options = {
@@ -29,29 +26,40 @@ function registroDePago(data, callback){
 			'Accept': 'application/json'
 		}
 	};
-	const response = (res, callback) => { 
-		let response = '';
-		res.on('data', (chunk) => {
-			response = (res.statusCode === 200) ? console.log(chunk.toString()) : console.log('404');
-			callback(response);
+	const response = (_res) => {
+		_res.on('data', (chunk) => {
+			let response = '';
+			response = 	(_res.statusCode === 200) ? chunk.toString() : 
+						(_res.statusCode === 300) ? '302' :
+						(_res.statusCode !== 404) ? '404' : '500';
+
+			console.log(response);
+			res.send(response);
 		});
-		res.on('end', () => {
+		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');
 		});
 	};
+	const error = (e) => {
+		console.error(`problem with request: ${e.message}`);
+	};
 
-	const req = http.request(options);
-	req.on('response', response);
-	req.on('error', (e) => { console.error(`problem with request: ${e.message}`) });
-	req.write(JSON.stringify(data.body));
-	req.end();
+	const _req = http.request(options);
+	_req.on('response', response);
+	_req.on('error', error);
+	_req.write(JSON.stringify(req.body));
+	_req.end();
+}
+
+function registroDePagoOPEN(){
+	
 }
 
 const data = {
 	solicitudDePago : solicitudDePago,
-	registroDePago : registroDePago,
-	sendDataToFront : sendDataToFront,
-	getInfo : getInfo
+	registroDePagoWS : registroDePagoWS,
+	infoDePagoWS : infoDePagoWS,
+	registroDePagoOPEN : registroDePagoOPEN
 };
 
 module.exports = data;

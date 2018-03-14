@@ -8,12 +8,17 @@ router.get('/', function(req, res) {
 	res.send("Hola Mundo"); // backup en caso de que no cargue angularjs
 });
 
+// Solicitud realizada por OPEN(1)
 router.route('/solicitudDePago')
-	.get(api.sendDataToFront)
 	.post(api.solicitudDePago);
 
-router.route('/registroDePago')
-	.get(api.getInfo)
-	.post(api.registroDePago);
+// Llamada y solicitud al registro de pago de WONDERSOFT(2, 3)
+router.route('/registroDePagoWS')
+	.get(api.infoDePagoWS)
+	.post(api.registroDePagoWS);
+
+// Registro de pago final en OPEN(4)
+router.route('/registroDePagoOPEN')
+	.post(api.registroDePagoOPEN);
 
 module.exports = router;
