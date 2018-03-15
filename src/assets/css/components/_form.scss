@@ -1,68 +1,72 @@
 .main-form{
     max-width: 400px;
-   padding: 10px 40px;
-   background:#FFF;
-   color: #888;
-   text-shadow: none;
+    padding: 10px 40px;
+    background:#FFF;
+    color: #888;
+    text-shadow: none;
 
-   .form-group{
-       margin-bottom: 15px;
-       label{
-           margin-bottom: 15px;
-       }
+    .form-group{
+        padding: 7px 0;
+        position: relative;
+        label{
+            margin-bottom: 15px;
+            &.text-control{
+                @include transition(all, 0.3s, ease);
+                position: absolute;
+                z-index: 5;
+                top: 8px;
+                left: 58px;
+                cursor: text;
+            }
+        }
    
-       .input-group {
-           .input-group-addon{
-               border: none;
-               background-color: #FFF;
-               i{
-                   color: #888;
-                   font-size: 17px;
-               }
-           }
-           input{
-               border-radius: 0;
-               font-size: 11px;
-               padding-top: 3px;
-               &.form-control{
-                   border: none;
-                   border-bottom: 1px solid #888;
-                   box-shadow: none;
-                   &:hover, &:focus{
-                       border-bottom: 1px solid #66afe9
-                   }
-               }
-           }
-       }
+        .input-group {
+            .input-group-addon{
+                border: none;
+                background-color: #FFF;
+                i{
+                    color: #888;
+                    font-size: 17px;
+                }
+            }
+            input{
+                border-radius: 0;
+                font-size: 14px;
+                padding-top: 3px;
+                &.form-control{
+                    border: none;
+                    border-bottom: 1px solid #888;
+                    box-shadow: none;
+                    &:focus{
+                        border-bottom: 1px solid #66afe9;
+                        & + label.text-control{
+                            top: -8px;
+                            left: 12px;
+                            font-size: 11px;
+                        }
+                    }
+                }
+            }
+        }
    
-       .form-control {
-           height: auto!important;
-           padding: 8px 12px !important;
-       }
-       button {
-           margin-top: 5px;
-           border: none;
-           margin-top: 28px;
-           padding: 6px 12px;
-           color: #FFF;
-           cursor: pointer;
-           -moz-border-radius: 2px;
-           -webkit-border-radius: 2px;
-           border-radius: 2px;
-           box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-           transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-           background: #de2533;
-           background: -moz-linear-gradient(top, #de2533 0%, #be1d29 100%);
-           background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f5f5f5), color-stop(100%, #be1d29));
-           background: -webkit-linear-gradient(top, #de2533 0%, #be1d29 100%);
-           background: -o-linear-gradient(top, #de2533 0%, #be1d29 100%);
-           background: -ms-linear-gradient(top, #de2533 0%, #be1d29 100%);
-           background: linear-gradient(top, #de2533 0%, #be1d29 100%);
-           filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#de2533', endColorstr='#be1d29', GradientType=0);
-       
-           &:hover{
-               box-shadow: 0 14px 37px rgba(0,0,0,0.25), 0 5px 10px rgba(0,0,0,0.22);
-           }
-       }
-   }
+        .form-control {
+            height: auto!important;
+            padding: 8px 12px !important;
+        }
+        button {
+            @include transition(all, 0.3s, cubic-bezier(.25,.8,.25,1));
+            @include border-radius(2px);
+            @include material-shadow-helper(1);
+            @include gradient(#de2533, #be1d29);
+
+            margin-top: 28px;
+            padding: 6px 12px;
+            border: none;
+            color: #FFF;
+            cursor: pointer;
+            &:hover{
+                @include material-shadow-helper(4);
+            }
+        }
+    }
 }
