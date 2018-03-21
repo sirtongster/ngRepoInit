@@ -11,118 +11,124 @@
         let host = '//' + location.host;
         
         let data = {
-			registroDePagoWS : registroDePagoWS,
-			infoDePagoWS : infoDePagoWS
+					infoDePagoWS : infoDePagoWS,
+					registroDePagoWS : registroDePagoWS,
+					registroDePagoOPEN : registroDePagoOPEN
         };
     
         return data;
         /*************************/
 		function infoDePagoWS(){
 			let obj = {
-                url : host + '/pago/registroDePagoWS',
-                method : 'GET',
-                happyResponse : (res) => {
-                    OPENINFO = res;
-                },
-                unhappyResponse : (err) => {
-					console.log('****** ANULACION ******');
-                }
-            };
+				url : host + '/pago/registroDePagoWS',
+				method : 'GET',
+				happyResponse : (res) => {
+						OPENINFO = res;
+				},
+				unhappyResponse : (err) => {
+					
+				}
+			};
 
-            return ajaxService.getData(obj);
+      return ajaxService.getData(obj);
 		}
 		
-        function registroDePagoWS(cardInfo, callback){
+    function registroDePagoWS(cardInfo, callback){
 			OPENINFO.TIPOOPERACION = validatorFactory.openDataValidator(OPENINFO);
-            let obj = {
-                url : host + '/pago/registroDePagoWS',
-                method : 'POST',
-                data : {
-					"Track1y2" 				: "",
-					"CodSeguridad" 			: (cardInfo.cvc) 				? cardInfo.cvc : "",
-					"CodServicio" 			: "",
-					"Version" 				: "",
-					"Servicio" 				: "",
-					"LineaProducto" 		: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO : "",
-					"Comercio" 				: "",
-					"Terminal" 				: "",
-					"Equipo" 				: (OPENINFO.EQUIPO) 			? OPENINFO.EQUIPO : "",
-					"Moneda" 				: "",
-					"Importe" 				: (OPENINFO.IMPORTE) 			? OPENINFO.IMPORTE : "",
-					"PlanPago" 				: "",
-					"Cuotas" 				: (cardInfo.cuotas) 			? cardInfo.cuotas : "",
-					"Ingreso" 				: "",
-					"TipoOperacion" 		: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION : "",
-					"Anulacion" 			: "",
-					"NCuponOriginal" 		: (OPENINFO.CUPONORIGINAL) 		? OPENINFO.CUPONORIGINAL : "",
-					"FechaOriginal" 		: (OPENINFO.FECHAORIGINAL) 		? OPENINFO.FECHAORIGINAL : "",
-					"NroFactura" 			: "",
-					"NroTarjeta" 			: (cardInfo.nroTarjeta) 		? cardInfo.nroTarjeta : "",
-					"FechaVencimiento" 		: (cardInfo.vencimiento) 		? cardInfo.vencimiento : "",
-					"FechaCompra" 			: "",
-					"HoraCompra" 			: "",
-					"NroCupon" 				: "",
-					"CodRespuesta" 			: "",
-					"Respuesta" 			: "",
-					"NroAutorizacion"		: "",
-					"NroTrace" 				: "",
-					"TipoAutorizacion" 		: (cardInfo.tipoautorizacion) 	? cardInfo.tipoautorizacion : "",
-					"NombreTarjeta" 		: "",
-					"Operador" 				: "",
-					"Titular" 				: "",
-					"Retrieval" 			: "",
-					"NroCuenta" 			: "",
-					"TipoDocumento" 		: "",
-					"Documento" 			: "",
-					"FechaPosdatada" 		: "",
-					"TipoCuenta" 			: "",
-					"Reservado" 			: "",
-					"Codigotarjeta" 		: "",
-					"LongAuxiliar" 			: "",
-					"Auxiliar" 				: "",
-					"IdentificacionCliente" : (OPENINFO.ID_CLIENTE) 		? OPENINFO.ID_CLIENTE : "",
-					"PinWorkingKey" 		: "",
-					"ImporteAdicional" 		: "",
-					"RespValDatosTit" 		: "",
-					"NombrePlanPago" 		: "",
-					"Lote" 					: "",
-					"TelDireccion" 			: "",
-					"DatoAdicional59" 		: "",
-					"token" 				: "",
-					"WKeyEncriptacion" 		: "",
-					"Bloque" 				: "",
-					"IDCLIENTE2" 			: "",
-					"DatosAdicionales" 		: "",
-					"Empresa" 				: "",
-					"PosMkEncriptacion" 	: "",
-					"EMVFallback" 			: "",
-					"BitMapAdicional" 		: "",
-					"MACREAL" 				: "",
-					"IDTerminal" 			: "",
-					"Filler" 				: ""
+			let obj = {
+				url : host + '/pago/registroDePagoWS',
+				method : 'POST',
+				data : {
+					"CodSeguridad" 					: (cardInfo.cvc) 							? cardInfo.cvc 							: "",
+					"LineaProducto" 				: (OPENINFO.LINEAPRODUCTO) 		? OPENINFO.LINEAPRODUCTO 		: "",
+					"Equipo" 								: (OPENINFO.EQUIPO)						? OPENINFO.EQUIPO 					: "",
+					"Importe" 							: (OPENINFO.IMPORTE) 					? OPENINFO.IMPORTE 					: "",
+					"Cuotas" 								: (cardInfo.cuotas) 					? cardInfo.cuotas 					: "",
+					"TipoOperacion" 				: (OPENINFO.TIPOOPERACION) 		? OPENINFO.TIPOOPERACION 		: "",
+					"NCuponOriginal" 				: (OPENINFO.CUPONORIGINAL) 		? OPENINFO.CUPONORIGINAL 		: "",
+					"FechaOriginal" 				: (OPENINFO.FECHAORIGINAL) 		? OPENINFO.FECHAORIGINAL 		: "",
+					"NroTarjeta" 						: (cardInfo.nroTarjeta) 			? cardInfo.nroTarjeta 			: "",
+					"FechaVencimiento" 			: (cardInfo.vencimiento) 			? cardInfo.vencimiento 			: "",
+					"TipoAutorizacion" 			: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
+					"IdentificacionCliente" : (OPENINFO.ID_CLIENTE) 			? OPENINFO.ID_CLIENTE 			: ""
 				},
-                happyResponse : (res) => {
+        happyResponse : (res) => {
 
 					(validatorFactory.ajaxResponseValidator(res)) ? 
-						callback({
-							respuesta 	: res.DataArea.Payment.Response,
-							respCode	: res.DataArea.Payment.ResponseCode
-						}) : callback('ANULACION');
-                },
-                unhappyResponse : (err) => {
-					console.log('****** ANULACION ******');
-					// anulacionDePagoWS();
-                }
-            };
+						registroDePagoOPEN(res.DataArea.Payment) : 
+						/** TODO: Render error page **/ "" ;
 
-            return ajaxService.getData(obj);
+        },
+        unhappyResponse : (err) => {
+					/** TODO: Render error page **/
+        }
+      };
+
+    	return ajaxService.getData(obj);
+		}
+
+		function registroDePagoOPEN(WSRESPONSE){
+			console.log(WSRESPONSE);
+			let obj = {
+				url : host + '/pago/registroDePagoOPEN',
+				method : 'POST',
+				data : {
+					"fechaPago" 				: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? formatDate(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+					"lineaProducto" 		: ( WSRESPONSE.ProductLine ) 							? WSRESPONSE.ProductLine 								: "",
+					"comercio" 					: ( WSRESPONSE.Commerce ) 								? WSRESPONSE.Commerce 									: "",
+					"terminal" 					: ( WSRESPONSE.Terminal ) 								? WSRESPONSE.Terminal 									: "",
+					"equipos" 					: ( WSRESPONSE.Machine ) 									? WSRESPONSE.Machine 										: "",
+					"moneda" 						: ( WSRESPONSE.CurrencyType ) 						? WSRESPONSE.CurrencyType 							: "",
+					"cuotas" 						: ( WSRESPONSE.NumberOfInstalments ) 			? WSRESPONSE.NumberOfInstalments 				: "",
+					"ingreso" 					: ( WSRESPONSE.EntryType ) 								? WSRESPONSE.EntryType 									: "",
+					"tipoOperacion" 		: ( WSRESPONSE.OperationType ) 						? WSRESPONSE.OperationType 							: "",
+					"anulacion" 				: ( WSRESPONSE.Cancellation ) 						? WSRESPONSE.Cancellation 							: "",
+					"numeroTarjeta" 		: ( WSRESPONSE.CreditCardNumber ) 				? WSRESPONSE.CreditCardNumber 					: "",
+					"fechaVencimiento" 	: ( WSRESPONSE.CreditCardExpirationDate ) ? WSRESPONSE.CreditCardExpirationDate 	: "",
+					"fechaco" 					: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? formatDate(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+					"cuta" 							: ( WSRESPONSE.VoucherNumber ) 						? WSRESPONSE.VoucherNumber 							: "",
+					"auto" 							: ( WSRESPONSE.AuthorizationNumber ) 			? WSRESPONSE.AuthorizationNumber 				: "",
+					"tipoauto" 					: ( WSRESPONSE.AuthorizationType ) 				? WSRESPONSE.AuthorizationType 					: "",
+					"operador" 					: ( WSRESPONSE.Operator ) 								? WSRESPONSE.Operator 									: "",
+					"cuenta" 						: ( WSRESPONSE.AccountNumber ) 						? WSRESPONSE.AccountNumber 							: "",
+					"codtarjeta"				: ( WSRESPONSE.CreditCardCode ) 					? WSRESPONSE.CreditCardCode 						: "",
+					"cliente" 					: ( WSRESPONSE.ClientID ) 								? WSRESPONSE.ClientID 									: "",
+					"meer" 							: ( WSRESPONSE.ResponseCode ) 						? WSRESPONSE.ResponseCode 							: "",
+					"dere" 							: ( WSRESPONSE.Response ) 								? WSRESPONSE.Response 									: "",
+					"lote" 							: "",
+					"suscriptionsPayment" : {
+						"pagos" : {
+							"cupon" : [ {
+								"suscripcion" : "10012959",
+								"valorpago" 	: ( WSRESPONSE.Amount ) 									? WSRESPONSE.Amount 										: ""
+							}]
+						}
+					}
+				},
+        happyResponse : (res) => {
+
+        },
+        unhappyResponse : (err) => {
+					
+        }
+      };
+
+			return ajaxService.getData(obj);
+			
+			function formatDate(date, time){
+				date = date.split("/").reverse();
+				date[0] = '20'+date[0];
+				date = date.join('-');
+				time = time.match( /.{1,2}/g ).join(':');
+				return date+'T'+time;
+			}
 		}
 		
 		function anulacionDePagoWS(){
 			let obj = {
-                url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
-                method : 'DELETE',
-                data : {
+				url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
+				method : 'DELETE',
+				data : {
 					"Track1y2" 				: "",
 					"CodSeguridad" 			: 648, 	// WEB
 					"CodServicio" 			: "",
@@ -186,15 +192,15 @@
 					"IDTerminal" 			: "",
 					"Filler" 				: ""
 				},
-                happyResponse : (res) => {
-                    callback(res);
-                },
-                unhappyResponse : (err) => {
-                    console.log(err);
-                }
-            };
+				happyResponse : (res) => {
+					callback(res);
+				},
+				unhappyResponse : (err) => {
+					console.log(err);
+				}
+      };
 
-            return ajaxService.getData(obj);
+      return ajaxService.getData(obj);
 		}
-    }
+  }
 })();

@@ -13,15 +13,14 @@
                                 <input 
                                 type="text"
                                 class="form-control"
+                                placeholder="Número de tarjeta"
                                 name="creditcard"
                                 id="creditcard"
                                 maxlength="16"
-                                pattern="^([0-9 ]+)+$"
                                 required
                                 spellcheck="false"
                                 ng-model="global.cardInfo.nroTarjeta"
                                 />
-                                <label for="creditcard" class="text-control">Número de tarjeta</label>
                             </div>
                             <div ng-show="creditcard.$touched && creditcard.$invalid">The name is required.</div>
                         </div>
@@ -37,15 +36,14 @@
                                 <input
                                 type="tel"
                                 class="form-control"
+                                placeholder="Vencimiento"
                                 name="expiration"
                                 id="expiration"
                                 maxlength="4"
-                                pattern="^(0[1-9]|1[0-2])( )?\/( )?([2][0]\d{2}|\d{2})$"
                                 required
                                 spellcheck="false"
                                 ng-model="global.cardInfo.vencimiento"
                                 />
-                                <label for="expiration" class="text-control">Vencimiento</label>
                             </div>
                         </div>
                     </div>
@@ -58,16 +56,15 @@
                                 <input
                                 type="password"
                                 class="form-control"
+                                placeholder="CVC"
                                 name="cvc"
                                 id="cvc"
                                 maxlength="3"
                                 minlength="3"
                                 required
-                                pattern="^[0-9]+$"
                                 spellcheck="false"
                                 ng-model="global.cardInfo.cvc"
                                 />
-                                <label for="cvc" class="text-control">CVC</label>
                             </div>
                         </div>
                     </div>

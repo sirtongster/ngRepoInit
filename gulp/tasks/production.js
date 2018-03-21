@@ -103,10 +103,13 @@ gulp.task( config.server.name, function(){
 });
 
 /*
- **	Mueve y concatena archivos de node en server.
+ **	Mueve archivos de node en server.
  */
 gulp.task( config.nodejs.name, [config.server.name], function(){
-	
+
+	gulp.src( 'server/**/*.json' )
+		.pipe( gulp.dest('dist/server/') );
+
 	return gulp.src( config.nodejs.src )
 		.pipe( plumber() )
 		.pipe( sourcemaps.init())
