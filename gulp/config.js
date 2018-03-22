@@ -51,7 +51,7 @@ module.exports = {
 			'bower_components/angular-route/angular-route.min.js',
 			'bower_components/angular-sanitize/angular-sanitize.min.js',
 			'bower_components/angular-loading-bar/build/loading-bar.min.js',
-			'bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js'
+			'bower_components/bootstrap/dist/js/bootstrap.min.js'
 		],
 		outputName: 'vendors.min.js',
 		dest: srv + '/public/assets/javascripts'

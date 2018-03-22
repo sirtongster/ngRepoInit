@@ -4,9 +4,9 @@
         .module('app')
         .factory('getService', getService);
 
-    getService.$inject = ['ajaxService', 'validatorFactory'];
+    getService.$inject = ['ajaxService', 'validatorFactory', '$location'];
 
-    function getService(ajaxService, validatorFactory){
+    function getService(ajaxService, validatorFactory, $location){
         let OPENINFO = {};
         let host = '//' + location.host;
         
@@ -56,11 +56,11 @@
 
 					(validatorFactory.ajaxResponseValidator(res)) ? 
 						registroDePagoOPEN(res.DataArea.Payment) : 
-						/** TODO: Render error page **/ "" ;
+						$location.path('/error') ;
 
         },
         unhappyResponse : (err) => {
-					/** TODO: Render error page **/
+					$location.path('/error');
         }
       };
 
@@ -73,7 +73,8 @@
 				url : host + '/pago/registroDePagoOPEN',
 				method : 'POST',
 				data : {
-					"fechaPago" 				: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? formatDate(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+					"fechaPago" 				: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	?
+																	validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
 					"lineaProducto" 		: ( WSRESPONSE.ProductLine ) 							? WSRESPONSE.ProductLine 								: "",
 					"comercio" 					: ( WSRESPONSE.Commerce ) 								? WSRESPONSE.Commerce 									: "",
 					"terminal" 					: ( WSRESPONSE.Terminal ) 								? WSRESPONSE.Terminal 									: "",
@@ -85,7 +86,8 @@
 					"anulacion" 				: ( WSRESPONSE.Cancellation ) 						? WSRESPONSE.Cancellation 							: "",
 					"numeroTarjeta" 		: ( WSRESPONSE.CreditCardNumber ) 				? WSRESPONSE.CreditCardNumber 					: "",
 					"fechaVencimiento" 	: ( WSRESPONSE.CreditCardExpirationDate ) ? WSRESPONSE.CreditCardExpirationDate 	: "",
-					"fechaco" 					: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? formatDate(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+					"fechaco" 					: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? 
+																	validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
 					"cuta" 							: ( WSRESPONSE.VoucherNumber ) 						? WSRESPONSE.VoucherNumber 							: "",
 					"auto" 							: ( WSRESPONSE.AuthorizationNumber ) 			? WSRESPONSE.AuthorizationNumber 				: "",
 					"tipoauto" 					: ( WSRESPONSE.AuthorizationType ) 				? WSRESPONSE.AuthorizationType 					: "",
@@ -106,22 +108,18 @@
 					}
 				},
         happyResponse : (res) => {
-
+					(res.errorCode === "0") ? 
+						$location.path('/success') :
+						$location.path('/error') ;
+					// TODO: Render successful transaction and  eventually trigger the changeStatusOpen function.
+					// TODO: anulacionDePagoOpen()
         },
         unhappyResponse : (err) => {
-					
         }
       };
 
 			return ajaxService.getData(obj);
 			
-			function formatDate(date, time){
-				date = date.split("/").reverse();
-				date[0] = '20'+date[0];
-				date = date.join('-');
-				time = time.match( /.{1,2}/g ).join(':');
-				return date+'T'+time;
-			}
 		}
 		
 		function anulacionDePagoWS(){

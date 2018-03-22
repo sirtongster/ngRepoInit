@@ -29,6 +29,11 @@
 				controllerAs: 'error',
 				templateUrl: 'templates/error.html'
 			})
+			.when('/success', {
+				controller: 'SuccessController',
+				controllerAs: 'success',
+				templateUrl: 'templates/success.html'
+			})
 			.otherwise({
 				redirectTo: '/'
 			});
