@@ -35,7 +35,7 @@
 			return $http.post(url, body)
 			.then((res)=>{
 				logger = res;
-				if( ! validatorFactory.ajaxResponseValidator(res) ){
+				if( validatorFactory.ajaxResponseValidator(res) ){
 					registroDePagoOPEN();
 				} else {
 					throw 'Datos invalidos desde OPEN';

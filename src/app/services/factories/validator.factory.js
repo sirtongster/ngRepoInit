@@ -27,10 +27,6 @@
 			return false;
 		}
 
-		function paymentDataValidator(data){
-
-		}
-
 		function openDataValidator(data){
 			return  (data.TIPOOPERACION === 'C') ? '1' :
 							(data.TIPOOPERACION === 'A') ? '1' : 
