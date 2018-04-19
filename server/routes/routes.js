@@ -13,12 +13,11 @@ router.route('/solicitudDePago')
 	.post(api.solicitudDePago);
 
 // Llamada y solicitud al registro de pago de WONDERSOFT(2, 3)
-router.route('/registroDePagoWS')
-	.get(api.infoDePagoWS)
+router.route('/pagoWS')
 	.post(api.registroDePagoWS);
 
 // Registro de pago final en OPEN(4)
-router.route('/registroDePagoOPEN')
+router.route('/pagoOPEN')
 	.post(api.registroDePagoOPEN);
 
 module.exports = router;

@@ -4,9 +4,9 @@
 		.module('app')
 		.controller('HomeController', HomeController);
 
-	HomeController.$inject = ['getService'];
+	HomeController.$inject = ['OSBService'];
 
-	function HomeController(getService){
+	function HomeController(OSBService){
 		const vm = this;
 		
 		// Public Variables

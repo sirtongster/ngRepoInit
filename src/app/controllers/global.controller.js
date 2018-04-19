@@ -3,9 +3,9 @@
 		.module('app')
 		.controller('GlobalController', GlobalController);
 	
-	GlobalController.$inject = ['cfpLoadingBar', 'getService'];
+	GlobalController.$inject = ['cfpLoadingBar', 'OSBService'];
 	
-	function GlobalController(cfpLoadingBar, getService){
+	function GlobalController(cfpLoadingBar, OSBService){
 		let vm = this;
 		
 		vm.cardInfo = {};
@@ -15,12 +15,11 @@
 		
 		function init(){
 			cfpLoadingBar.start();
-			getService.infoDePagoWS();
 		}
 		
 		function enviar(e) {
 			e.stopPropagation();
-			getService.registroDePagoWS({
+			OSBService.registroDePagoWS({
 				cvc 		: (parseInt(vm.cardInfo.cvc)) 			? vm.cardInfo.cvc 			: "",
 				cuotas 		: (parseInt(vm.cardInfo.cuotas))	 	? vm.cardInfo.cuotas 		: "",
 				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta 	: "",

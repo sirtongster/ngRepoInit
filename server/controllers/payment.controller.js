@@ -5,20 +5,33 @@ import http from 'http';
 import path from 'path';
 import fs 	from 'fs';
 
-let info = {};
+import _http from '../services/osb.service.js';
+
+let OPENINFO = {};
+
+const OSB = {
+	protocol: 'http:',
+	host: 'sr-osb12-ad02',
+	port: '10001',
+	path: '',
+	method: '',
+	headers: {
+		'Content-Type': 'application/json; charset=utf-8',
+		'Accept': 'application/json'
+	}
+}
+
 
 // POST request
 function solicitudDePago(req, res){
-	info = req.body;
+	OPENINFO = req.body;
 	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
 
-function infoDePagoWS(req, res){
-	res.send(info);
-}
-
 function registroDePagoWS(req, res){
-	
+	OSB.path = '/paymentManagement/paymentCC';
+	OSB.method = 'POST';
+
 	const load_payload = (()=>{
 		for(let item in req.body){
 			if(_payload_ws.hasOwnProperty(item)){
@@ -27,79 +40,65 @@ function registroDePagoWS(req, res){
 		}
 	})();
 
-	const options = {
-		protocol: 'http:',
-		host: 'sr-osb12-ad02',
-		port: '10001',
-		path: '/paymentManagement/paymentCC',
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json; charset=utf-8',
-			'Accept': 'application/json'
-		}
-	};{}
-	const response = (_res) => {
-		_res.on('data', (chunk) => {
-			let response = chunk.toString();
-			console.log(response);
-			res.send(response);
-		});
-		_res.on('end', () => {
-			console.log('**** RESPONSE END ****');
-		});
-	};
-	const error = (e) => {
-		console.error(`problem with request: ${e.message}`);
-	};
-	const _req = http.request(options);
-
-	_req.on('response', response);
-	_req.on('error', error);
-	_req.write(JSON.stringify(_payload_ws));
-	_req.end();
-
+	_http(OSB, _payload_ws, (response) => {
+		res.send('Servicio solicitudDePago ejecutado');
+	});
 }
 
 function registroDePagoOPEN(req, res){
-	let _payload_op = req.body;
+	OSB.path = '/paymentManagement/payments/open';
+	OSB.method = 'POST';
 
-	const options = {
-		protocol: 'http:',
-		host: 'sr-osb12-ad02',
-		port: '10001',
-		path: '/paymentManagement/payments/open',
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json; charset=utf-8',
-			'Accept': 'application/json'
+
+
+
+
+
+	data : {
+		"fechaPago" 				: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	?
+														validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+		"lineaProducto" 		: ( WSRESPONSE.ProductLine ) 							? WSRESPONSE.ProductLine 								: "",
+		"comercio" 					: ( WSRESPONSE.Commerce ) 								? WSRESPONSE.Commerce 									: "",
+		"terminal" 					: ( WSRESPONSE.Terminal ) 								? WSRESPONSE.Terminal 									: "",
+		"equipos" 					: ( WSRESPONSE.Machine ) 									? WSRESPONSE.Machine 										: "",
+		"moneda" 						: ( WSRESPONSE.CurrencyType ) 						? WSRESPONSE.CurrencyType 							: "",
+		"cuotas" 						: ( WSRESPONSE.NumberOfInstalments ) 			? WSRESPONSE.NumberOfInstalments 				: "",
+		"ingreso" 					: ( WSRESPONSE.EntryType ) 								? WSRESPONSE.EntryType 									: "",
+		"tipoOperacion" 		: ( WSRESPONSE.OperationType ) 						? WSRESPONSE.OperationType 							: "",
+		"anulacion" 				: ( WSRESPONSE.Cancellation ) 						? WSRESPONSE.Cancellation 							: "",
+		"numeroTarjeta" 		: ( WSRESPONSE.CreditCardNumber ) 				? WSRESPONSE.CreditCardNumber 					: "",
+		"fechaVencimiento" 	: ( WSRESPONSE.CreditCardExpirationDate ) ? WSRESPONSE.CreditCardExpirationDate 	: "",
+		"fechaco" 					: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? 
+														validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
+		"cuta" 							: ( WSRESPONSE.VoucherNumber ) 						? WSRESPONSE.VoucherNumber 							: "",
+		"auto" 							: ( WSRESPONSE.AuthorizationNumber ) 			? WSRESPONSE.AuthorizationNumber 				: "",
+		"tipoauto" 					: ( WSRESPONSE.AuthorizationType ) 				? WSRESPONSE.AuthorizationType 					: "",
+		"operador" 					: ( WSRESPONSE.Operator ) 								? WSRESPONSE.Operator 									: "",
+		"cuenta" 						: ( WSRESPONSE.AccountNumber ) 						? WSRESPONSE.AccountNumber 							: "",
+		"codtarjeta"				: ( WSRESPONSE.CreditCardCode ) 					? WSRESPONSE.CreditCardCode 						: "",
+		"cliente" 					: ( WSRESPONSE.ClientID ) 								? WSRESPONSE.ClientID 									: "",
+		"meer" 							: ( WSRESPONSE.ResponseCode ) 						? WSRESPONSE.ResponseCode 							: "",
+		"dere" 							: ( WSRESPONSE.Response ) 								? WSRESPONSE.Response 									: "",
+		"lote" 							: "",
+		"suscriptionsPayment" : {
+			"pagos" : {
+				"cupon" : [ {
+					"suscripcion" : "10012959",
+					"valorpago" 	: ( WSRESPONSE.Amount ) 									? WSRESPONSE.Amount 										: ""
+				}]
+			}
 		}
-	};{}
-	const response = (_res) => {
-		_res.on('data', (chunk) => {
-			let response = chunk.toString();
-			console.log(response);
-			res.send(response);
-		});
-		_res.on('end', () => {
-			console.log('**** RESPONSE END ****');
-		});
-	};
-	const error = (e) => {
-		console.error(`problem with request: ${e.message}`);
-	};
-	const _req = http.request(options);
-	console.log(_payload_op);
-	_req.on('response', response);
-	_req.on('error', error);
-	_req.write(JSON.stringify(_payload_op));
-	_req.end();
+	}
+
+	_http(OSB, (response) => {
+		res.send('Servicio solicitudDePago ejecutado');
+	});
 
 }
 
 const data = {
 	solicitudDePago : solicitudDePago,
 	registroDePagoWS : registroDePagoWS,
-	infoDePagoWS : infoDePagoWS,
 	registroDePagoOPEN : registroDePagoOPEN
 };
 

@@ -4,7 +4,7 @@
 		.module('app')
 		.controller('ErrorController', ErrorController);
 
-	ErrorController.$inject = [''];
+	ErrorController.$inject = [];
 
 	function ErrorController(){
 		const vm = this;
@@ -15,7 +15,7 @@
 		vm.init = init;
 
 		function init(){
-			
+			// cambio de estado
 		}
 	}
 })();
