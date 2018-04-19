@@ -4,9 +4,9 @@
 		.module('app')
 		.controller('SuccessController', SuccessController);
 
-	SuccessController.$inject = [''];
+	SuccessController.$inject = ['OSBService'];
 
-	function SuccessController(){
+	function SuccessController(OSBService){
 		const vm = this;
 		
 		// Public Variables
@@ -15,7 +15,7 @@
 		vm.init = init;
 
 		function init(){
-			
+			OSBService.cambioDeEstado('success');
 		}
 	}
 })();

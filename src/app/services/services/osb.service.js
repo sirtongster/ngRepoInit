@@ -13,29 +13,30 @@
 		
 		let data = {
 			registroDePagoWS : registroDePagoWS,
-			registroDePagoOPEN : registroDePagoOPEN
+			registroDePagoOPEN : registroDePagoOPEN,
+			anulacionDePagoWS : anulacionDePagoWS,
+			anulacionDePagoOPEN : anulacionDePagoOPEN,
+			cambioDeEstado : cambioDeEstado
 		};
 
 		return data;
 		/*************************/
 
 		function registroDePagoWS(cardInfo, callback){
-			// OPENINFO.TIPOOPERACION = validatorFactory.openDataValidator(OPENINFO);
-
 			let url = `${ host }/pago/pagoWS`;
 			let body = {
-				"CodSeguridad" 					: (cardInfo.cvc) 							? cardInfo.cvc 							: "",
-				"Cuotas" 								: (cardInfo.cuotas) 					? cardInfo.cuotas 					: "",
-				"NroTarjeta" 						: (cardInfo.nroTarjeta) 			? cardInfo.nroTarjeta 			: "",
-				"FechaVencimiento" 			: (cardInfo.vencimiento) 			? cardInfo.vencimiento 			: "",
+				"CodSeguridad" 					: (cardInfo.cvc) 							? cardInfo.cvc 							: "648",
+				"Cuotas" 								: (cardInfo.cuotas) 					? cardInfo.cuotas 					: "01",
+				"NroTarjeta" 						: (cardInfo.nroTarjeta) 			? cardInfo.nroTarjeta 			: "4507990000977787",
+				"FechaVencimiento" 			: (cardInfo.vencimiento) 			? cardInfo.vencimiento 			: "1905",
 				"TipoAutorizacion" 			: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
 			}
-
+			
 			return $http.post(url, body)
 			.then((res)=>{
 				logger = res;
-				if( validatorFactory.ajaxResponseValidator(res) ){
-					registroDePagoOPEN(res.DataArea.Payment);
+				if( ! validatorFactory.ajaxResponseValidator(res) ){
+					registroDePagoOPEN();
 				} else {
 					throw 'Datos invalidos desde OPEN';
 				}
@@ -49,23 +50,16 @@
 			});
 		}
 
-		function registroDePagoOPEN(WSRESPONSE){
-			let url = `${ host }/pago/pagoWS`;
-			let body = {
-				"CodSeguridad" 					: (cardInfo.cvc) 							? cardInfo.cvc 							: "",
-				"Cuotas" 								: (cardInfo.cuotas) 					? cardInfo.cuotas 					: "",
-				"NroTarjeta" 						: (cardInfo.nroTarjeta) 			? cardInfo.nroTarjeta 			: "",
-				"FechaVencimiento" 			: (cardInfo.vencimiento) 			? cardInfo.vencimiento 			: "",
-				"TipoAutorizacion" 			: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
-			}
+		function registroDePagoOPEN(){
+			let url = `${ host }/pago/pagoOPEN`;
 
-			return $http.post(url, body)
+			return $http.get(url)
 			.then((res)=>{
 				logger = res;
-				if( validatorFactory.ajaxResponseValidator(res) ){
-					registroDePagoOPEN(res.DataArea.Payment);
+				if( res.status === 200 ){
+					$location.path('/success');
 				} else {
-					throw 'Datos invalidos desde OPEN';
+					throw 'Error al registrar pago OPEN';
 				}
 			})
 			.catch((e)=>{
@@ -74,107 +68,66 @@
 			})
 			.finally(()=>{
 				console.log(logger);
-			});
-
-
-
-
-			let obj = {
-				url : host + '/pago/registroDePagoOPEN',
-				method : 'POST',
-				,
-				happyResponse : (res) => {
-					(res.errorCode === "0") ? 
-						$location.path('/success') :
-						$location.path('/error') ;
-					// TODO: Render successful transaction and  eventually trigger the changeStatusOpen function.
-					// TODO: anulacionDePagoOpen()
-				},
-				unhappyResponse : (err) => {
-				}
-			};
-
-			return ajaxService.getData(obj);
-			
+			});			
 		}
 		
 		function anulacionDePagoWS(){
-			let obj = {
-				url : 'http://sr-osb12-ad02:10001/paymentManagement/paymentCC',
-				method : 'DELETE',
-				data : {
-					"Track1y2" 				: "",
-					"CodSeguridad" 			: 648, 	// WEB
-					"CodServicio" 			: "",
-					"Version" 				: "",
-					"Servicio" 				: "",
-					"LineaProducto" 		: "002",// OPEN
-					"Comercio" 				: "",
-					"Terminal" 				: "",
-					"Equipo" 				: "", 	// OPEN
-					"Moneda" 				: "",
-					"Importe" 				: "", 	// OPEN
-					"PlanPago" 				: "",
-					"Cuotas" 				: "01", // WEB
-					"Ingreso" 				: "",
-					"TipoOperacion" 		: "", 	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"Anulacion" 			: "",	// WEB --TODO: LOGICA DE ANULACION O DEVOLUCION
-					"NCuponOriginal" 		: "", 	// OPEN
-					"FechaOriginal" 		: "",	// OPEN
-					"NroFactura" 			: "",
-					"NroTarjeta" 			: "", 	// WEB
-					"FechaVencimiento" 		: "", 	// WEB
-					"FechaCompra" 			: "",
-					"HoraCompra" 			: "",
-					"NroCupon" 				: "",
-					"CodRespuesta" 			: "",
-					"Respuesta" 			: "",
-					"NroAutorizacion"		: "",
-					"NroTrace" 				: "",
-					"TipoAutorizacion" 		: "",
-					"NombreTarjeta" 		: "",
-					"Operador" 				: "",
-					"Titular" 				: "",
-					"Retrieval" 			: "",
-					"NroCuenta" 			: "",
-					"TipoDocumento" 		: "",
-					"Documento" 			: "",
-					"FechaPosdatada" 		: "",
-					"TipoCuenta" 			: "",
-					"Reservado" 			: "",
-					"Codigotarjeta" 		: "",
-					"LongAuxiliar" 			: "",
-					"Auxiliar" 				: "",
-					"IdentificacionCliente" : "", 	// OPEN
-					"PinWorkingKey" 		: "",
-					"ImporteAdicional" 		: "",
-					"RespValDatosTit" 		: "",
-					"NombrePlanPago" 		: "",
-					"Lote" 					: "",
-					"TelDireccion" 			: "",
-					"DatoAdicional59" 		: "",
-					"token" 				: "",
-					"WKeyEncriptacion" 		: "",
-					"Bloque" 				: "",
-					"IDCLIENTE2" 			: "",
-					"DatosAdicionales" 		: "",
-					"Empresa" 				: "",
-					"PosMkEncriptacion" 	: "",
-					"EMVFallback" 			: "",
-					"BitMapAdicional" 		: "",
-					"MACREAL" 				: "",
-					"IDTerminal" 			: "",
-					"Filler" 				: ""
-				},
-				happyResponse : (res) => {
-					callback(res);
-				},
-				unhappyResponse : (err) => {
-					console.log(err);
-				}
-			};
+			let url = `${ host }/pago/pagoWS`;
 
-			return ajaxService.getData(obj);
+			return $http.delete(url)
+			.then((res)=>{
+				logger = res;
+				if( jQuery.isEmptyObject( res ) ){
+					anulacionDePagoOPEN
+				} else {
+					throw 'No se puedo anular en pago en WS';
+				}
+			})
+			.catch((e)=>{
+				logger = e;
+				$location.path('/error');
+			})
+			.finally(()=>{
+				console.log(logger);
+			});			
+		}
+
+		function anulacionDePagoOPEN(){
+			let url = `${ host }/pago/pagoOPEN`;
+
+			return $http.delete(url)
+			.then((res)=>{
+				logger = res;
+				if( jQuery.isEmptyObject( res ) ){
+					throw 'Se anulo el pago En OPEN correctamente';
+				} else {
+					throw 'No se puedo anular en pago en OPEN';
+				}
+			})
+			.catch((e)=>{
+				logger = e;
+				$location.path('/error');
+			})
+			.finally(()=>{
+				console.log(logger);
+			});			
+		}
+
+		function cambioDeEstado(status){
+			let url = `${ host }/pago/cambioDeEstado`;
+
+			return $http.post(url, { status: status })
+			.then((res)=>{
+				logger = res;
+				console.log('ok');
+			})
+			.catch((e)=>{
+				logger = e;
+				$location.path('/error');
+			})
+			.finally(()=>{
+				console.log(logger);
+			});			
 		}
   }
 })();

@@ -18,12 +18,9 @@
 		/*************************/
 			
 		function ajaxResponseValidator(data){
-			if (data.hasOwnProperty('DataArea')){
-				if (data.DataArea.hasOwnProperty('Payment')){
-					if (data.DataArea.Payment.ResponseCode === '00'){
-						return true;
-					}
-					return false;
+			if (data.hasOwnProperty('Payment')){
+				if (data.Payment.ResponseCode === '00'){
+					return true;
 				}
 				return false;
 			}

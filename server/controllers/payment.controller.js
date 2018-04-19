@@ -1,13 +1,15 @@
 import _payload_ws from '../mocks/registro-de-pago-WS.json';
-// import _payload_op from '../mocks/registro-de-pago-OPEN.json';
+import _payload_op from '../mocks/registro-de-pago-OPEN.json';
 
 import http from 'http';
 import path from 'path';
 import fs 	from 'fs';
 
-import _http from '../services/osb.service.js';
+import validate from '../services/validate.service.js';
+import osb from '../services/osb.service.js';
 
 let OPENINFO = {};
+let WSRESPONSE = {};
 
 const OSB = {
 	protocol: 'http:',
@@ -30,8 +32,9 @@ function solicitudDePago(req, res){
 
 function registroDePagoWS(req, res){
 	OSB.path = '/paymentManagement/paymentCC';
-	OSB.method = 'POST';
+	OSB.method = req.method;
 
+	/** Carga el payload con la info enviada por parametro */
 	const load_payload = (()=>{
 		for(let item in req.body){
 			if(_payload_ws.hasOwnProperty(item)){
@@ -39,9 +42,19 @@ function registroDePagoWS(req, res){
 			}
 		}
 	})();
+	/** Carga el payload con la info del request de OPEN */
+	_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO 	|| "009";
+	_payload_ws.Equipo 								= OPENINFO.EQUIPO 				|| "";
+	_payload_ws.Importe 							= OPENINFO.IMPORTE 				|| "000000001000";
+	_payload_ws.TipoOperacion 				= OPENINFO.TIPOOPERACION 	|| "1";
+	_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL 	|| "";
+	_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL 	|| "";
+	_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE 		|| "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ";
 
-	_http(OSB, _payload_ws, (response) => {
-		res.send('Servicio solicitudDePago ejecutado');
+	osb(OSB, _payload_ws, ( response ) => {
+		WSRESPONSE = JSON.parse(response);
+		WSRESPONSE = WSRESPONSE.Payment;
+		res.send('Servicio registroDePagoWS ejecutado');
 	});
 }
 
@@ -49,57 +62,92 @@ function registroDePagoOPEN(req, res){
 	OSB.path = '/paymentManagement/payments/open';
 	OSB.method = 'POST';
 
-
-
-
-
-
-	data : {
-		"fechaPago" 				: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	?
-														validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
-		"lineaProducto" 		: ( WSRESPONSE.ProductLine ) 							? WSRESPONSE.ProductLine 								: "",
-		"comercio" 					: ( WSRESPONSE.Commerce ) 								? WSRESPONSE.Commerce 									: "",
-		"terminal" 					: ( WSRESPONSE.Terminal ) 								? WSRESPONSE.Terminal 									: "",
-		"equipos" 					: ( WSRESPONSE.Machine ) 									? WSRESPONSE.Machine 										: "",
-		"moneda" 						: ( WSRESPONSE.CurrencyType ) 						? WSRESPONSE.CurrencyType 							: "",
-		"cuotas" 						: ( WSRESPONSE.NumberOfInstalments ) 			? WSRESPONSE.NumberOfInstalments 				: "",
-		"ingreso" 					: ( WSRESPONSE.EntryType ) 								? WSRESPONSE.EntryType 									: "",
-		"tipoOperacion" 		: ( WSRESPONSE.OperationType ) 						? WSRESPONSE.OperationType 							: "",
-		"anulacion" 				: ( WSRESPONSE.Cancellation ) 						? WSRESPONSE.Cancellation 							: "",
-		"numeroTarjeta" 		: ( WSRESPONSE.CreditCardNumber ) 				? WSRESPONSE.CreditCardNumber 					: "",
-		"fechaVencimiento" 	: ( WSRESPONSE.CreditCardExpirationDate ) ? WSRESPONSE.CreditCardExpirationDate 	: "",
-		"fechaco" 					: ( WSRESPONSE.PurchaseTime && WSRESPONSE.PurchaseDate)	? 
-														validatorFactory.formatDateValidator(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "",
-		"cuta" 							: ( WSRESPONSE.VoucherNumber ) 						? WSRESPONSE.VoucherNumber 							: "",
-		"auto" 							: ( WSRESPONSE.AuthorizationNumber ) 			? WSRESPONSE.AuthorizationNumber 				: "",
-		"tipoauto" 					: ( WSRESPONSE.AuthorizationType ) 				? WSRESPONSE.AuthorizationType 					: "",
-		"operador" 					: ( WSRESPONSE.Operator ) 								? WSRESPONSE.Operator 									: "",
-		"cuenta" 						: ( WSRESPONSE.AccountNumber ) 						? WSRESPONSE.AccountNumber 							: "",
-		"codtarjeta"				: ( WSRESPONSE.CreditCardCode ) 					? WSRESPONSE.CreditCardCode 						: "",
-		"cliente" 					: ( WSRESPONSE.ClientID ) 								? WSRESPONSE.ClientID 									: "",
-		"meer" 							: ( WSRESPONSE.ResponseCode ) 						? WSRESPONSE.ResponseCode 							: "",
-		"dere" 							: ( WSRESPONSE.Response ) 								? WSRESPONSE.Response 									: "",
-		"lote" 							: "",
-		"suscriptionsPayment" : {
-			"pagos" : {
-				"cupon" : [ {
-					"suscripcion" : "10012959",
-					"valorpago" 	: ( WSRESPONSE.Amount ) 									? WSRESPONSE.Amount 										: ""
-				}]
-			}
+	_payload_op.fechaPago 				= ( WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime ) ? validate._date(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "2018-03-21T10:53:59",
+	_payload_op.lineaProducto 		= WSRESPONSE.ProductLine 								|| "",
+	_payload_op.comercio 					= WSRESPONSE.Commerce 									|| "",
+	_payload_op.terminal 					= WSRESPONSE.Terminal 									|| "",
+	_payload_op.equipos 					= WSRESPONSE.Machine 										|| "",
+	_payload_op.moneda 						= WSRESPONSE.CurrencyType 							|| "",
+	_payload_op.cuotas 						= WSRESPONSE.NumberOfInstalments 				|| "",
+	_payload_op.ingreso 					= WSRESPONSE.EntryType 									|| "",
+	_payload_op.tipoOperacion 		= WSRESPONSE.OperationType 							|| "",
+	_payload_op.anulacion 				= WSRESPONSE.Cancellation 							|| "",
+	_payload_op.numeroTarjeta 		= WSRESPONSE.CreditCardNumber 					|| "",
+	_payload_op.fechaVencimiento 	= WSRESPONSE.CreditCardExpirationDate 	|| "",
+	_payload_op.fechaco 					= ( WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime ) ? validate._date(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	: "2018-03-21T10:53:59",
+	_payload_op.cuta 							= WSRESPONSE.VoucherNumber 							|| "",
+	_payload_op.auto 							= WSRESPONSE.AuthorizationNumber 				|| "",
+	_payload_op.tipoauto 					= WSRESPONSE.AuthorizationType 					|| "",
+	_payload_op.operador 					= WSRESPONSE.Operator 									|| "",
+	_payload_op.cuenta 						= WSRESPONSE.AccountNumber 							|| "",
+	_payload_op.codtarjeta				= WSRESPONSE.CreditCardCode 						|| "",
+	_payload_op.cliente 					= WSRESPONSE.ClientID 									|| "",
+	_payload_op.meer 							= WSRESPONSE.ResponseCode 							|| "",
+	_payload_op.dere 							= WSRESPONSE.Response 									|| "",
+	_payload_op.lote 							= "",
+	_payload_op.suscriptionsPayment = {
+		"pagos" : {
+			"cupon" : [{
+				"suscripcion" : ( WSRESPONSE.ClientID ) ? WSRESPONSE.ClientID.slice(15, 23) : "",
+				"valorpago" 	: WSRESPONSE.Amount 										 				|| ""
+			}]
 		}
 	}
 
-	_http(OSB, (response) => {
-		res.send('Servicio solicitudDePago ejecutado');
+	osb(OSB, _payload_op, (response) => {
+		res.send('Servicio registroDePagoOPEN ejecutado');
 	});
 
+}
+function anulacionDePagoWS(req, res){
+	OSB.path = '/paymentManagement/paymentCC';
+	OSB.method = req.method;
+
+	_payload_ws.TipoOperacion = '1'
+	_payload_ws.Anulacion 		= 'S'
+
+	osb(OSB, _payload_ws, (response) => {
+		WSRESPONSE = response;
+		res.send('Servicio anulacionDePagoWS ejecutado');
+	});
+}
+
+function anulacionDePagoOPEN(req, res){
+	OSB.path = '/paymentManagement/payments/open';
+	OSB.method = req.method;
+
+	_payload_anul_op.contract 		= _payload_op.fechaPago;
+	_payload_anul_op.amount 			= WSRESPONSE.Amount;
+	_payload_anul_op.paymentDate	= _payload_op.fechaPago;
+
+	osb(OSB, _payload_anul_op, (response) => {
+		res.send('Servicio anulacionDePagoOPEN ejecutado');
+	});
+}
+
+function cambioDeEstado(req, res){
+	OSB.path = '/paymentManagement/requestStatus';
+	OSB.method = req.method;
+
+	let _payload_st = {
+		request : OPENINFO.IDTRANSACCION,
+		status : ( req.body.status === 'success' ) ? 14 : 0
+	};
+
+	
+
+	osb(OSB, _payload_st, (response) => {
+		res.send('Servicio cambioDeEstado ejecutado');
+	});
 }
 
 const data = {
 	solicitudDePago : solicitudDePago,
 	registroDePagoWS : registroDePagoWS,
-	registroDePagoOPEN : registroDePagoOPEN
+	registroDePagoOPEN : registroDePagoOPEN,
+	anulacionDePagoWS : anulacionDePagoWS,
+	anulacionDePagoOPEN : anulacionDePagoOPEN,
+	cambioDeEstado : cambioDeEstado
 };
 
 module.exports = data;

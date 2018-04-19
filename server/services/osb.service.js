@@ -1,4 +1,5 @@
 import http from 'http';
+import validate from './validate.service.js';
 
 let _osb = (OSB, payload, callback) => {
 	const req = http.request(OSB);
@@ -7,7 +8,7 @@ let _osb = (OSB, payload, callback) => {
 		_res.on('data', (chunk) => {
 			let response = chunk.toString();
 			console.log(response);
-			callbak(response);
+			callback(response);
 		});
 		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');
