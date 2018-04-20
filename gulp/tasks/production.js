@@ -156,7 +156,7 @@ gulp.task('start', [config.nodejs.name], function(){
 		script: 'dist/server.js',
 		ext: 'js',
 		env: {
-			'NODE_ENV': 'development'
+			'NODE_ENV': 'production'
 		}
 	});
 	

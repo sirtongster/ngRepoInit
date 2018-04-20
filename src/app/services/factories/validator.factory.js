@@ -9,7 +9,6 @@
 	function validatorFactory(){       
 		let data = {
 			ajaxResponseValidator : ajaxResponseValidator,
-			paymentDataValidator : paymentDataValidator,
 			openDataValidator : openDataValidator,
 			formatDateValidator : formatDateValidator
 		};

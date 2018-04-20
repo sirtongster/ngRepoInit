@@ -5,12 +5,15 @@
 /*
  * General styles
  */
- #playground-container {
-    height: 500px;
-    overflow: hidden !important;
-    -webkit-overflow-scrolling: touch;
-}
+ 
+// #playground-container {
+//     height: 500px;
+//     overflow: hidden !important;
+//     -webkit-overflow-scrolling: touch;
+// }
+
 body, html{
+    background: black default;
     height: 100%;
  	font-family: 'Oxygen', sans-serif;
 }

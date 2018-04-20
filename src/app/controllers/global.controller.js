@@ -10,6 +10,7 @@
 		
 		vm.cardInfo = {};
 
+		vm.ie = ie;
 		vm.init = init;
 		vm.enviar = enviar;
 		
@@ -27,6 +28,13 @@
 			}, (data) => {
 				cfpLoadingBar.complete();
 			});
+		}
+
+		function ie(){
+			// Internet Explorer 6-11
+			let isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+			return ( isIE ) ? true: false;
 		}
 	}
 })();

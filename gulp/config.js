@@ -14,8 +14,9 @@ module.exports = {
 			src + '/assets/css/main.scss',
 			'bower_components/animate.css/animate.min.css',
 			'bower_components/angular-loading-bar/build/loading-bar.min.css',
-			src + '/assets/css/components/ie8.css',
-			src + '/assets/css/components/ie9.css'
+			src + '/assets/css/ie/ie.css',
+			src + '/assets/css/ie/ie8.css',
+			src + '/assets/css/ie/ie9.css'
 		],
 		outputName: 'main.css',
 		dest: srv + '/public/assets/stylesheets'
