@@ -7,4 +7,4 @@ COPY node_modules/ /data/app/node_modules
 
 EXPOSE 7777
 
-CMD node dist/server.js
+ENTRYPOINT ["/bin/bash", "-c", "host=$host port=$port node /data/app/dist/server.js"]

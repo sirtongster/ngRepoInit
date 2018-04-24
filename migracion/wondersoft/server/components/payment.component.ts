@@ -1,13 +1,12 @@
-const _payload_ws = require( '../mocks/registro-de-pago-WS.json' );
-const _payload_op = require( '../mocks/registro-de-pago-OPEN.json' );
-
-const http = require( 'http' );
-const path = require( 'path' );
-const fs 	= require( 'fs' );
+import * as http from 'http';
+import * as path from 'path';
 
 import { ValidateService } from '../services/validate.service';
 import { OSBService } from '../services/osb.service';
 import { OpenInfo, WSRequest, WSResponse } from '../interfaces/payment.interfaces';
+
+const _payload_ws = require( '../mocks/registro-de-pago-WS.json' );
+const _payload_op = require( '../mocks/registro-de-pago-OPEN.json' );
 
 
 class PaymentComponent{
@@ -31,12 +30,12 @@ class PaymentComponent{
 		console.log('Componente PaymentComponent inicializado');
 	}
 
-	solicitudDePago(req, res){
+	solicitudDePago( req:any, res:any ){
 		this.OPENINFO = req.body;
 		res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 	}
 
-	registroDePagoWS(req, res){
+	registroDePagoWS( req:any, res:any ){
 		this.OSB.path = '/paymentManagement/paymentCC';
 		this.OSB.method = req.method;
 
@@ -58,7 +57,7 @@ class PaymentComponent{
 		_payload_ws.IdentificacionCliente = this.OPENINFO.ID_CLIENTE 			|| "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ";
 
 
-		this.osb = new OSBService(this.OSB, _payload_ws, ( response ) => {
+		this.osb = new OSBService(this.OSB, _payload_ws, ( response:any ) => {
 			let keeper: any;
 			keeper = JSON.parse(response);
 			this.WSRESPONSE = keeper.Payment;
@@ -66,7 +65,7 @@ class PaymentComponent{
 		});
 	}
 
-	registroDePagoOPEN(req, res){
+	registroDePagoOPEN( req:any, res:any ){
 		this.OSB.path = '/paymentManagement/payments/open';
 		this.OSB.method = 'POST';
 		
@@ -74,23 +73,23 @@ class PaymentComponent{
 
 
 		_payload_op.fechaPago 				= ( this.WSRESPONSE.PurchaseDate, this.WSRESPONSE.PurchaseTime ) ? validate.date(  this.WSRESPONSE.PurchaseDate, this.WSRESPONSE.PurchaseTime )	: "2018-03-21T10:53:59",
-		_payload_op.lineaProducto 		= this.WSRESPONSE.ProductLine 								|| "",
+		_payload_op.lineaProducto 		= this.WSRESPONSE.ProductLine 							|| "",
 		_payload_op.comercio 					= this.WSRESPONSE.Commerce 									|| "",
 		_payload_op.terminal 					= this.WSRESPONSE.Terminal 									|| "",
-		_payload_op.equipos 					= this.WSRESPONSE.Machine 										|| "",
+		_payload_op.equipos 					= this.WSRESPONSE.Machine 									|| "",
 		_payload_op.moneda 						= this.WSRESPONSE.CurrencyType 							|| "",
-		_payload_op.cuotas 						= this.WSRESPONSE.NumberOfInstalments 				|| "",
-		_payload_op.ingreso 					= this.WSRESPONSE.EntryType 									|| "",
-		_payload_op.tipoOperacion 		= this.WSRESPONSE.OperationType 							|| "",
+		_payload_op.cuotas 						= this.WSRESPONSE.NumberOfInstalments 			|| "",
+		_payload_op.ingreso 					= this.WSRESPONSE.EntryType 								|| "",
+		_payload_op.tipoOperacion 		= this.WSRESPONSE.OperationType 						|| "",
 		_payload_op.anulacion 				= this.WSRESPONSE.Cancellation 							|| "",
 		_payload_op.numeroTarjeta 		= this.WSRESPONSE.CreditCardNumber 					|| "",
 		_payload_op.fechaVencimiento 	= this.WSRESPONSE.CreditCardExpirationDate 	|| "",
 		_payload_op.fechaco 					= ( this.WSRESPONSE.PurchaseDate, this.WSRESPONSE.PurchaseTime ) ? validate.date(  this.WSRESPONSE.PurchaseDate, this.WSRESPONSE.PurchaseTime )	: "2018-03-21T10:53:59",
-		_payload_op.cuta 							= this.WSRESPONSE.VoucherNumber 							|| "",
-		_payload_op.auto 							= this.WSRESPONSE.AuthorizationNumber 				|| "",
-		_payload_op.tipoauto 					= this.WSRESPONSE.AuthorizationType 					|| "",
+		_payload_op.cuta 							= this.WSRESPONSE.VoucherNumber 						|| "",
+		_payload_op.auto 							= this.WSRESPONSE.AuthorizationNumber 			|| "",
+		_payload_op.tipoauto 					= this.WSRESPONSE.AuthorizationType 				|| "",
 		_payload_op.operador 					= this.WSRESPONSE.Operator 									|| "",
-		_payload_op.cuenta 						= this.WSRESPONSE.AccountNumber 							|| "",
+		_payload_op.cuenta 						= this.WSRESPONSE.AccountNumber 						|| "",
 		_payload_op.codtarjeta				= this.WSRESPONSE.CreditCardCode 						|| "",
 		_payload_op.cliente 					= this.WSRESPONSE.ClientID 									|| "",
 		_payload_op.meer 							= this.WSRESPONSE.ResponseCode 							|| "",
@@ -105,25 +104,25 @@ class PaymentComponent{
 			}
 		}
 
-		this.osb = new OSBService(this.OSB, _payload_op, (response) => {
+		this.osb = new OSBService(this.OSB, _payload_op, ( response:any ) => {
 			res.send('Servicio registroDePagoOPEN ejecutado');
 		});
 
 	}
-	anulacionDePagoWS(req, res){
+	anulacionDePagoWS( req:any, res:any ){
 		this.OSB.path = '/paymentManagement/paymentCC';
 		this.OSB.method = req.method;
 
 		_payload_ws.TipoOperacion = '1'
 		_payload_ws.Anulacion 		= 'S'
 
-		this.osb = new OSBService(this.OSB, _payload_ws, (response) => {
+		this.osb = new OSBService(this.OSB, _payload_ws, ( response:any ) => {
 			this.WSRESPONSE = response;
 			res.send('Servicio anulacionDePagoWS ejecutado');
 		});
 	}
 
-	anulacionDePagoOPEN(req, res){
+	anulacionDePagoOPEN( req:any, res:any ){
 		let _payload_anul_op: any;
 		this.OSB.path = '/paymentManagement/payments/open';
 		this.OSB.method = req.method;
@@ -132,12 +131,12 @@ class PaymentComponent{
 		_payload_anul_op.amount 			= this.WSRESPONSE.Amount;
 		_payload_anul_op.paymentDate	= _payload_op.fechaPago;
 
-		this.osb = new OSBService(this.OSB, _payload_anul_op, (response) => {
+		this.osb = new OSBService(this.OSB, _payload_anul_op, ( response:any ) => {
 			res.send('Servicio anulacionDePagoOPEN ejecutado');
 		});
 	}
 
-	cambioDeEstado(req, res){
+	cambioDeEstado( req:any, res:any ){
 		this.OSB.path = '/paymentManagement/requestStatus';
 		this.OSB.method = req.method;
 
@@ -146,9 +145,7 @@ class PaymentComponent{
 			status : ( req.body.status === 'success' ) ? 14 : 0
 		};
 
-		
-
-		this.osb = new OSBService(this.OSB, _payload_st, (response) => {
+		this.osb = new OSBService(this.OSB, _payload_st, ( response:any ) => {
 			res.send('Servicio cambioDeEstado ejecutado');
 		});
 	}

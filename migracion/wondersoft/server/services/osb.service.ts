@@ -16,7 +16,7 @@ export class OSBService{
 	}
 
 	private response( _res:any ){
-		_res.on('data', (chunk) => {
+		_res.on('data', ( chunk: any ) => {
 			let response = chunk.toString();
 			console.log(response);
 			this.callback(response);
