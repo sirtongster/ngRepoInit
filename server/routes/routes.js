@@ -12,15 +12,8 @@ router.get('/', function(req, res) {
 router.route('/solicitudDePago')
 	.post(api.solicitudDePago);
 
-// Llamada y solicitud al registro de pago de WONDERSOFT(2, 3)
-router.route('/pagoWS')
-	.post(api.registroDePagoWS)
-	.delete(api.anulacionDePagoWS);
-
-// Registro de pago final en OPEN(4)
-router.route('/pagoOPEN')
-	.get(api.registroDePagoOPEN)
-	.delete(api.anulacionDePagoOPEN);
+router.route('/payment')
+	.post(makeAPayment);
 
 router.route('/health')
 	.get(api.health)
