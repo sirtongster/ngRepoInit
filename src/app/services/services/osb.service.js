@@ -12,18 +12,13 @@
 		let host = `${ window.location.protocol }//${ window.location.host }`;
 		
 		let data = {
-			registroDePagoWS : registroDePagoWS,
-			registroDePagoOPEN : registroDePagoOPEN,
-			anulacionDePagoWS : anulacionDePagoWS,
-			anulacionDePagoOPEN : anulacionDePagoOPEN,
+			payment : payment,
 			cambioDeEstado : cambioDeEstado
 		};
 
 		return data;
 		/*************************/
-
-		function registroDePagoWS(cardInfo, callback){
-			let url = `${ host }/pago/pagoWS`;
+		function payment(cardInfo, callback){
 			let body = {
 				"CodSeguridad" 					: (cardInfo.cvc) 							? cardInfo.cvc 							: "648",
 				"Cuotas" 								: (cardInfo.cuotas) 					? cardInfo.cuotas 					: "01",
@@ -31,6 +26,30 @@
 				"FechaVencimiento" 			: (cardInfo.vencimiento) 			? cardInfo.vencimiento 			: "1905",
 				"TipoAutorizacion" 			: (cardInfo.tipoautorizacion) ? cardInfo.tipoautorizacion : "",
 			}
+
+			(los campos de anulacion estan activos? anulacion : registro)
+		}
+
+		function cambioDeEstado(status){
+			let url = `${ host }/pago/cambioDeEstado`;
+
+			return $http.post(url, { status: status })
+			.then((res)=>{
+				logger = res;
+				console.log('ok');
+			})
+			.catch((e)=>{
+				logger = e;
+				$location.path('/error');
+			})
+			.finally(()=>{
+				console.log(logger);
+			});			
+		}
+
+
+		function registroDePagoWS(cardInfo, callback){
+			let url = `${ host }/pago/pagoWS`;
 			
 			return $http.post(url, body)
 			.then((res)=>{
@@ -103,23 +122,6 @@
 				} else {
 					throw 'No se puedo anular en pago en OPEN';
 				}
-			})
-			.catch((e)=>{
-				logger = e;
-				$location.path('/error');
-			})
-			.finally(()=>{
-				console.log(logger);
-			});			
-		}
-
-		function cambioDeEstado(status){
-			let url = `${ host }/pago/cambioDeEstado`;
-
-			return $http.post(url, { status: status })
-			.then((res)=>{
-				logger = res;
-				console.log('ok');
 			})
 			.catch((e)=>{
 				logger = e;
