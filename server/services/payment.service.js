@@ -1,3 +1,6 @@
+import _payload_ws from '../mocks/registro-de-pago-WS.json';
+import _payload_op from '../mocks/registro-de-pago-OPEN.json';
+
 const OSB = {
 	protocol: 'http:',
 	host: process.env.host,
@@ -10,14 +13,14 @@ const OSB = {
 	}
 }
 
-function registroDePagoWS(req, res){
+function registroDePagoWS(OPENINFO, CARDINFO){
 	OSB.path = '/paymentManagement/paymentCC';
-	OSB.method = req.method;
+	OSB.method = 'POST';
 
 	const load_payload = (()=>{
-		for(let item in req.body){
+		for(let item in CARDINFO){
 			if(_payload_ws.hasOwnProperty(item)){
-				_payload_ws[item] = req.body[item];
+				_payload_ws[item] = CARDINFO[item];
 			}
 		}
 		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO 	|| "009";
@@ -30,16 +33,15 @@ function registroDePagoWS(req, res){
 	})();
 
 	osb(OSB, _payload_ws, ( response ) => {
-		// TODO: Validaciones
-		validate.ws_response(response);
-		//
-		WSRESPONSE = JSON.parse(response);
+		WSRESPONSE = response;
 		WSRESPONSE = WSRESPONSE.Payment;
-		res.send('Servicio registroDePagoWS ejecutado');
+		return registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO );
+	}, ( msj ) => {
+		return false;
 	});
 }
 
-function registroDePagoOPEN(req, res){
+function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO ){
 	OSB.path = '/paymentManagement/payments/open';
 	OSB.method = 'POST';
 
@@ -76,21 +78,38 @@ function registroDePagoOPEN(req, res){
 	}
 
 	osb(OSB, _payload_op, (response) => {
-		res.send('Servicio registroDePagoOPEN ejecutado');
+		return true;
+	}, ( msj ) => {
+		anulacionDePagoWS( OPENINFO, CARDINFO );
 	});
 
 }
 
-function anulacionDePagoWS(req, res){
+function anulacionDePagoWS( OPENINFO, CARDINFO ){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = req.method;
 
-	_payload_ws.TipoOperacion = '1'
-	_payload_ws.Anulacion 		= 'S'
+	const load_payload = (()=>{
+		for(let item in CARDINFO){
+			if(_payload_ws.hasOwnProperty(item)){
+				_payload_ws[item] = CARDINFO[item];
+			}
+		}
+		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO 	|| "009";
+		_payload_ws.Equipo 								= OPENINFO.EQUIPO 				|| "";
+		_payload_ws.Importe 							= OPENINFO.IMPORTE 				|| "000000001000";
+		_payload_ws.TipoOperacion 				= OPENINFO.TIPOOPERACION 	|| "1";
+		_payload_ws.Anulacion 						= 'S';
+		_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL 	|| "";
+		_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL 	|| "";
+		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE 		|| "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ";
+	})();
+
 
 	osb(OSB, _payload_ws, (response) => {
-		WSRESPONSE = response;
-		res.send('Servicio anulacionDePagoWS ejecutado');
+		return true;
+	}, ( msj ) => {
+		return false;
 	});
 }
 
@@ -103,7 +122,9 @@ function anulacionDePagoOPEN(req, res){
 	_payload_anul_op.paymentDate	= _payload_op.fechaPago;
 
 	osb(OSB, _payload_anul_op, (response) => {
-		res.send('Servicio anulacionDePagoOPEN ejecutado');
+		// TODO
+	}, ( msj ) => {
+		// TODO
 	});
 }
 

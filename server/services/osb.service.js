@@ -1,13 +1,18 @@
 import http from 'http';
 
-let _osb = (OSB, payload, callback) => {
+let _osb = (OSB, payload, callback, callbackErr) => {
 	const req = http.request(OSB);
 
 	const response = (_res) => {
 		_res.on('data', (chunk) => {
 			let response = chunk.toString();
+			response = JSON.parse(response);
 			console.log(response);
-			callback(response);
+			if( validate.payment( response ) ){
+				callback( response );
+			} else {
+				callbackErr( "error" );
+			};
 		});
 		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');

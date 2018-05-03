@@ -1,6 +1,3 @@
-import _payload_ws from '../mocks/registro-de-pago-WS.json';
-import _payload_op from '../mocks/registro-de-pago-OPEN.json';
-
 import path from 'path';
 import fs 	from 'fs';
 
@@ -20,11 +17,12 @@ function solicitudDePago(req, res){
 }
 
 function makeAPayment(req, res){
-	// Llamar a registro
-	// Registro?
-	// llamar a reg open
-	// sino llamar anul ws
+	payment.registroDePagoWS( OPENINFO, req.body );
+	payment.registroDePagoOPEN();
 
+	payment.anulacionDePagoOPEN( OPENINFO, req.body);
+
+	res.send('Servicio de pago ejecutado');
 }
 
 function cambioDeEstado(req, res){
@@ -35,8 +33,6 @@ function cambioDeEstado(req, res){
 		request : OPENINFO.IDTRANSACCION,
 		status : ( req.body.status === 'success' ) ? 14 : 0
 	};
-
-	
 
 	osb(OSB, _payload_st, (response) => {
 		res.send('Servicio cambioDeEstado ejecutado');
