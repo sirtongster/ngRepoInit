@@ -8,22 +8,22 @@
 
 	function validatorFactory(){       
 		let data = {
-			ajaxResponseValidator : ajaxResponseValidator,
+			pago : pago,
 			openDataValidator : openDataValidator,
 			formatDateValidator : formatDateValidator
 		};
 	
 		return data;
 		/*************************/
-			
-		function ajaxResponseValidator(data){
-			if (data.hasOwnProperty('Payment')){
-				if (data.Payment.ResponseCode === '00'){
+
+		function pago(data){
+			let status = data.status;
+			switch(status){
+				case 200: 
 					return true;
-				}
-				return false;
+					break;
+				default: return false;
 			}
-			return false;
 		}
 
 		function openDataValidator(data){

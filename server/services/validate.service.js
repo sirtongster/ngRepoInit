@@ -7,12 +7,17 @@ let validate = {
 		time = time.match( /.{1,2}/g ).join(':');
 		return date+'T'+time;
 	},
-	ws_response : (res) => {
-		if (res.hasOwnProperty('Payment')){
-			if (res.Payment.ResponseCode === '00'){
-				return true;
+	ws_response : (info) => {
+		let reponse;
+		if (info.Payment.ResponseCode){
+			switch(info.Payment.ResponseCode){
+				case "00":
+					response = true;
+					break;
+				default: response = false;
 			}
-			return false;
+		} else {
+			
 		}
 		return false;
 	}

@@ -21,10 +21,10 @@
 		function enviar(e) {
 			e.stopPropagation();
 			OSBService.registroDePagoWS({
-				cvc 		: (parseInt(vm.cardInfo.cvc)) 			? vm.cardInfo.cvc 			: "",
-				cuotas 		: (parseInt(vm.cardInfo.cuotas))	 	? vm.cardInfo.cuotas 		: "",
+				cvc 				: (parseInt(vm.cardInfo.cvc)) 				? vm.cardInfo.cvc 				: "",
+				cuotas 			: (parseInt(vm.cardInfo.cuotas))	 		? vm.cardInfo.cuotas 			: "",
 				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta 	: "",
-				vencimiento : (parseInt(vm.cardInfo.vencimiento)) 	? vm.cardInfo.vencimiento 	: ""
+				vencimiento : (parseInt(vm.cardInfo.vencimiento)) ? vm.cardInfo.vencimiento : ""
 			}, (data) => {
 				cfpLoadingBar.complete();
 			});

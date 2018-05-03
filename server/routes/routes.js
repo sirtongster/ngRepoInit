@@ -22,4 +22,7 @@ router.route('/pagoOPEN')
 	.get(api.registroDePagoOPEN)
 	.delete(api.anulacionDePagoOPEN);
 
+router.route('/health')
+	.get(api.health)
+	
 module.exports = router;

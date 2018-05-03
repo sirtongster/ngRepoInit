@@ -7,14 +7,15 @@ import fs 	from 'fs';
 
 import validate from '../services/validate.service.js';
 import osb from '../services/osb.service.js';
+import health from '../services/health.service.js';
 
 let OPENINFO = {};
 let WSRESPONSE = {};
 
 const OSB = {
 	protocol: 'http:',
-	host: 'sr-osb12-ad02',
-	port: '10001',
+	host: process.env.host,
+	port: process.env.port, 
 	path: '',
 	method: '',
 	headers: {
@@ -34,24 +35,25 @@ function registroDePagoWS(req, res){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = req.method;
 
-	/** Carga el payload con la info enviada por parametro */
 	const load_payload = (()=>{
 		for(let item in req.body){
 			if(_payload_ws.hasOwnProperty(item)){
 				_payload_ws[item] = req.body[item];
 			}
 		}
+		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO 	|| "009";
+		_payload_ws.Equipo 								= OPENINFO.EQUIPO 				|| "";
+		_payload_ws.Importe 							= OPENINFO.IMPORTE 				|| "000000001000";
+		_payload_ws.TipoOperacion 				= OPENINFO.TIPOOPERACION 	|| "1";
+		_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL 	|| "";
+		_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL 	|| "";
+		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE 		|| "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ";
 	})();
-	/** Carga el payload con la info del request de OPEN */
-	_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO 	|| "009";
-	_payload_ws.Equipo 								= OPENINFO.EQUIPO 				|| "";
-	_payload_ws.Importe 							= OPENINFO.IMPORTE 				|| "000000001000";
-	_payload_ws.TipoOperacion 				= OPENINFO.TIPOOPERACION 	|| "1";
-	_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL 	|| "";
-	_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL 	|| "";
-	_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE 		|| "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ";
 
 	osb(OSB, _payload_ws, ( response ) => {
+		// TODO: Validaciones
+		validate.ws_response(response);
+		//
 		WSRESPONSE = JSON.parse(response);
 		WSRESPONSE = WSRESPONSE.Payment;
 		res.send('Servicio registroDePagoWS ejecutado');
@@ -99,6 +101,7 @@ function registroDePagoOPEN(req, res){
 	});
 
 }
+
 function anulacionDePagoWS(req, res){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = req.method;
@@ -141,13 +144,30 @@ function cambioDeEstado(req, res){
 	});
 }
 
+function health(){
+	OSB.path = '/paymentManagement/paymentCC';
+	OSB.method = POST
+
+	osb(OSB, _payload_ws, ( response ) => {
+		// (response) ? 
+	});
+
+
+	OSB.path = '/paymentManagement/payments/open';
+	OSB.method = 'POST';
+
+	OSB.path = '/paymentManagement/paymentCC';
+	OSB.method = req.method
+}
+
 const data = {
-	solicitudDePago : solicitudDePago,
-	registroDePagoWS : registroDePagoWS,
-	registroDePagoOPEN : registroDePagoOPEN,
-	anulacionDePagoWS : anulacionDePagoWS,
+	solicitudDePago 		: solicitudDePago,
+	registroDePagoWS 		: registroDePagoWS,
+	registroDePagoOPEN 	: registroDePagoOPEN,
+	anulacionDePagoWS 	: anulacionDePagoWS,
 	anulacionDePagoOPEN : anulacionDePagoOPEN,
-	cambioDeEstado : cambioDeEstado
+	cambioDeEstado 			: cambioDeEstado,
+	health							: health
 };
 
 module.exports = data;

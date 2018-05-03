@@ -3,8 +3,20 @@ cd docker/
 sh docker-deploy-local-sh 1.0.0
 sh docker-push-sh 1.0.0 mciarla bssdigital
 
-## En el servidor (desa o test)
+## En todos loas servidores
+
 docker stop wondersoft
 docker rm wondersoft
 docker rmi sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
-docker run -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
+
+## En desa
+
+docker run -e host=sr-osb12-ad02 -e port=10001 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
+
+## En test
+
+docker run -e host=esbt -e port=8000 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
+
+## En prod
+
+docker run -e host=sr-osb12-ad02 -e port=10001 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0

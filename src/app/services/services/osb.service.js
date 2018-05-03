@@ -35,9 +35,9 @@
 			return $http.post(url, body)
 			.then((res)=>{
 				logger = res;
-				if( validatorFactory.ajaxResponseValidator(res) ){
+				if ( validatorFactory.pago(res) ){
 					registroDePagoOPEN();
-				} else {
+				}	else {
 					throw 'Datos invalidos desde OPEN';
 				}
 			})
@@ -56,10 +56,10 @@
 			return $http.get(url)
 			.then((res)=>{
 				logger = res;
-				if( res.status === 200 ){
+				if ( validatorFactory.pago(res) ){
 					$location.path('/success');
 				} else {
-					throw 'Error al registrar pago OPEN';
+					'Error al registrar pago OPEN';
 				}
 			})
 			.catch((e)=>{
@@ -78,7 +78,7 @@
 			.then((res)=>{
 				logger = res;
 				if( jQuery.isEmptyObject( res ) ){
-					anulacionDePagoOPEN
+					anulacionDePagoOPEN();
 				} else {
 					throw 'No se puedo anular en pago en WS';
 				}

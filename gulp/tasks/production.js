@@ -151,12 +151,14 @@ gulp.task( config.html.name, function() {
 /*
  **	Nodemon
  */
-gulp.task('start', [config.nodejs.name], function(){
+gulp.task('start-dev', [config.nodejs.name], function(){
 	var stream = nodemon({
 		script: 'dist/server.js',
 		ext: 'js',
 		env: {
-			'NODE_ENV': 'production'
+			'NODE_ENV': 'development',
+			'host': 'sr-osb12-ad02.corp.cablevision.com.ar',
+			'port': '10001'
 		}
 	});
 	
@@ -166,6 +168,25 @@ gulp.task('start', [config.nodejs.name], function(){
 	})
 });
 
+gulp.task('start-test', [config.nodejs.name], function(){
+	var stream = nodemon({
+		script: 'dist/server.js',
+		ext: 'js',
+		env: {
+			'NODE_ENV': 'production',
+			'host': 'esbt.corp.cablevision.com.ar',
+			'port': '8000'
+		}
+	});
+	
+	stream.on('crash', function(){
+		console.error('Application has crashed!\n');
+		stream.emit('restart', 10);  // restart the server in 10 seconds
+	})
+});
+
+
+
 gulp.task('prod', function(callback){
 	runSequence(config.clean.name, [
 		config.sass.name,
@@ -173,7 +194,7 @@ gulp.task('prod', function(callback){
 		config.appjs.name,
 		config.fonts.name,
 		config.assets.name
-	], config.inject.name, 'start', callback);
+	], config.inject.name, 'start-test', callback);
 });
 
 gulp.task('default', function(callback){
@@ -183,5 +204,5 @@ gulp.task('default', function(callback){
 		config.appjs.name,
 		config.fonts.name,
 		config.assets.name
-	], config.inject.name, callback);
+	], config.inject.name, 'start-dev', callback);
 });
