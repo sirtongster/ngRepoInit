@@ -15,7 +15,7 @@
 		vm.init = init;
 
 		function init(){
-			OSBService.cambioDeEstado('error');
+			OSBService.status('error');
 		}
 	}
 })();

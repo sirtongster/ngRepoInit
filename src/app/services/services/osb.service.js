@@ -32,9 +32,9 @@
 			.then((res)=>{
 				logger = res;
 				if ( validatorFactory.pago(res) ){
-					registroDePagoOPEN();
+					$location.path('/success');
 				}	else {
-					throw 'Datos invalidos desde OPEN';
+					throw 'No se pudo procesar el pago';
 				}
 			})
 			.catch((e)=>{
@@ -53,7 +53,6 @@
 			return $http.post(url, { status: status })
 			.then((res)=>{
 				logger = res;
-				console.log('ok');
 			})
 			.catch((e)=>{
 				logger = e;

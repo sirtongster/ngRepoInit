@@ -13,7 +13,10 @@ router.route('/solicitudDePago')
 	.post(api.solicitudDePago);
 
 router.route('/payment')
-	.post(makeAPayment);
+	.post(api.makeAPayment);
+
+router.route('/status')
+	.post(api.status);
 
 router.route('/health')
 	.get(api.health)

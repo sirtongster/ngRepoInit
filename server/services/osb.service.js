@@ -1,18 +1,32 @@
 import http from 'http';
+import validate from '../services/validate.service.js';
+
+let _OSB = {
+	protocol: 'http:',
+	host: process.env.host,
+	port: process.env.port, 
+	path: '',
+	method: '',
+	headers: {
+		'Content-Type': 'application/json; charset=utf-8',
+		'Accept': 'application/json'
+	}
+}
 
 let _osb = (OSB, payload, callback, callbackErr) => {
-	const req = http.request(OSB);
+	_OSB.path = OSB.path;
+	_OSB.method = OSB.method;
+
+	const req = http.request(_OSB);
 
 	const response = (_res) => {
 		_res.on('data', (chunk) => {
 			let response = chunk.toString();
-			response = JSON.parse(response);
 			console.log(response);
-			if( validate.payment( response ) ){
-				callback( response );
-			} else {
-				callbackErr( "error" );
-			};
+			response = JSON.parse(response);
+			( validate.payment( response ) ) ?
+				callback( response ) :
+				callbackErr( response );
 		});
 		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');

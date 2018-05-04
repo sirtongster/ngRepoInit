@@ -10,29 +10,22 @@ let validate = {
 	payment : (info) => {
 		let response;
 		if (info.Payment && info.Payment.ResponseCode){
-			switch(info.Payment.ResponseCode){
-				case "00":
-					return true;
-					break;
-				default: return false;
+			if(info.Payment.ResponseCode === "00"){
+				return true;
 			}
 		} else if( info.errorCode ) {
-			switch( info.errorCode ){
-				case "0":
-					return true;
-					break;
-				default: return false;
+			if( info.errorCode === "0" ){
+				return true;
 			}
 		} else if( info.code ) {
-			return true;
-			// switch( info.code ){
-			// 	case "0":
-			// 		return true;
-			// 		break;
-			// 	default: return false;
-			// }
+			if( info.code === "0" ){
+				return true;
+			}
 		}
 		return false;
+	},
+	isAnulment : (info) => {
+		return ( ! info.TIPOOPERACION === 'C') ? true : false;
 	}
 };
 

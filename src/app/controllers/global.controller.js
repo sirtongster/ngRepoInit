@@ -20,7 +20,7 @@
 		
 		function enviar(e) {
 			e.stopPropagation();
-			OSBService.registroDePagoWS({
+			OSBService.payment({
 				cvc 				: (parseInt(vm.cardInfo.cvc)) 				? vm.cardInfo.cvc 				: "",
 				cuotas 			: (parseInt(vm.cardInfo.cuotas))	 		? vm.cardInfo.cuotas 			: "",
 				nroTarjeta 	: (parseInt(vm.cardInfo.nroTarjeta)) 	? vm.cardInfo.nroTarjeta 	: "",
