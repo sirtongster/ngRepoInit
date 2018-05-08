@@ -1,26 +1,38 @@
 import http from 'http';
 import validate from '../services/validate.service.js';
 
-let _OSB = {
-	protocol: 'http:',
-	host: process.env.host,
-	port: process.env.port, 
-	path: '',
-	method: '',
-	headers: {
-		'Content-Type': 'application/json; charset=utf-8',
-		'Accept': 'application/json'
+export class OSB{
+
+	payload = {};
+	osb = {
+		protocol: 'http:',
+		host: process.env.host,
+		port: process.env.port, 
+		path: '',
+		method: '',
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+			'Accept': 'application/json'
+		}
 	}
-}
 
-let _osb = (OSB, payload, callback, callbackErr) => {
-	_OSB.path = OSB.path;
-	_OSB.method = OSB.method;
+	constructor(osb, payload){
+		this.osb.path = osb.path;
+		this.osb.method = osb.method;
+		this.payload = payload;
+	}
 
-	const req = http.request(_OSB);
+	send( callback, callbackErr ){
+		const req = http.request( this.osb );
+	
+		req.on('response', this.response);
+		req.on('error', this.error);
+		req.write(JSON.stringify( this.payload ));
+		req.end();
+	}
 
-	const response = (_res) => {
-		_res.on('data', (chunk) => {
+	response( _res ){
+		_res.on('data', ( chunk ) => {
 			let response = chunk.toString();
 			console.log(response);
 			response = JSON.parse(response);
@@ -31,15 +43,11 @@ let _osb = (OSB, payload, callback, callbackErr) => {
 		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');
 		});
-	};
-	const error = (e) => {
-		console.error(`problem with request: ${e.message}`);
-	};
+	}
 
-	req.on('response', response);
-	req.on('error', error);
-	req.write(JSON.stringify(payload));
-	req.end();
+	error( e ){
+		console.error(`problem with request: ${ e.message }`);
+	}
 }
 
-export default _osb;
+export default OSB;

@@ -46,7 +46,7 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 	_payload_op.ingreso 					= WSRESPONSE.EntryType 									|| "",
 	_payload_op.tipoOperacion 		= WSRESPONSE.OperationType 							|| "",
 	_payload_op.anulacion 				= WSRESPONSE.Cancellation 							|| "",
-	_payload_op.numeroTarjeta 		= "", //WSRESPONSE.CreditCardNumber 					|| "",
+	_payload_op.numeroTarjeta 		= WSRESPONSE.CreditCardNumber 					|| "",
 	_payload_op.fechaVencimiento 	= WSRESPONSE.CreditCardExpirationDate 	|| "",
 	_payload_op.fechaco 					= validate._date(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	|| "2018-03-21T10:53:59",
 	_payload_op.cuta 							= WSRESPONSE.VoucherNumber 							|| "",

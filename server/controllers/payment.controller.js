@@ -7,6 +7,7 @@ import osb from '../services/osb.service.js';
 import _health from '../services/health.service.js';
 
 let OPENINFO = {};
+
 /** TESTING */
 let OPENINFO_TEST = {
 	"LINEAPRODUCTO" : "005",
@@ -17,7 +18,8 @@ let OPENINFO_TEST = {
 	"FECHAORIGINAL" : "",
 	"ID_CLIENTE" 		: "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ",
 };
-OPENINFO = OPENINFO_TEST;
+
+// OPENINFO = OPENINFO_TEST;
 /** END TESTING */
 
 
@@ -28,17 +30,25 @@ function solicitudDePago(req, res){
 }
 
 function makeAPayment(req, res){
-	if ( validate.isAnulment(OPENINFO) ){ 
-		payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
-			res.status(data.status);
-			res.send(data.message);
-		}) 
+
+	if( !validate.isEmptyObject( OPENINFO )){
+		console.log( OPENINFO );
+		if ( validate.isAnulment(OPENINFO) ){ 
+			payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
+				res.status(data.status);
+				res.send(data.message);
+			})
+		} else {
+			payment.registroDePagoWS( OPENINFO, req.body, (data) => {
+				res.status(data.status);
+				res.send(data.message);
+			});
+		}
 	} else {
-		payment.registroDePagoWS( OPENINFO, req.body, (data) => {
-			res.status(data.status);
-			res.send(data.message);
-		});
+		res.status(500);
+		res.send('No existe información del cliente');
 	}
+
 }
 
 function status(req, res){

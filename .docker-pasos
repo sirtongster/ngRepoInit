@@ -11,7 +11,7 @@ docker rmi sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
 
 ## En desa
 
-docker run -e host=sr-osb12-ad02 -e port=10001 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
+docker run -e host=sr-osb12-ad02 -e port=10001 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0-ALPHA
 
 ## En test
 
@@ -20,3 +20,19 @@ docker run -e host=esbt -e port=8000 -d --restart=always -p 7777:7777 --name won
 ## En prod
 
 docker run -e host=sr-osb12-ad02 -e port=10001 -d --restart=always -p 7777:7777 --name wondersoft -v /data/app -w /data/app --dns-search=corp.cablevision.com.ar sr-docker-xp01.corp.cablevision.com.ar/wondersoft:1.0.0
+
+
+## LIMPIAR ENTORNOS
+
+docker rm $(docker ps -q -f 'status=exited')
+docker rmi $(docker images -q -f "dangling=true")
+
+## ó
+
+docker rm $(docker ps -a | grep Exit | cut -d ' ' -f 1)
+docker rmi $(docker images | tail -n +2 | awk '$1 == "<none>" {print $'3'}')
+
+docker volume rm $(docker volume ls -qf dangling=true)
+
+## Listar volumenes en dangling
+$ docker volume ls -qf dangling=true

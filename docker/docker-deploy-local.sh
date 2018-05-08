@@ -14,6 +14,12 @@ if [ $# = 1 ] ; then
 
 	fi
 
+	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA) ]; then
+
+		docker rmi sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA
+
+	fi
+
 	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest) ]; then
 
 		docker rmi sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest
@@ -25,12 +31,10 @@ if [ $# = 1 ] ; then
 
 # Creo la nueva imagen
 
-	docker build -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest .
-
-#	docker build -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest --build-arg HTTP_PROXY=http://mciarla:camacho1@192.168.184.151:80 --build-arg HTTPS_PROXY=http://mciarla:camacho6@192.168.184.151:80 .
+	docker build -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest .
 
 # Instancio el container
-	docker run -e host=sr-osb12-ad02 -e port=10001 -d -p 9229:7777 --name wondersoft -v /data/app -w /data/app sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1
+	docker run -e host=sr-osb12-ad02 -e port=10001 -d -p 9229:7777 --name wondersoft -v /data/app -w /data/app sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA
 
 	rm -R dist
 	
