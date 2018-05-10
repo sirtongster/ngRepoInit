@@ -1,38 +1,26 @@
 import http from 'http';
 import validate from '../services/validate.service.js';
 
-export class OSB{
-
-	payload = {};
-	osb = {
-		protocol: 'http:',
-		host: process.env.host,
-		port: process.env.port, 
-		path: '',
-		method: '',
-		headers: {
-			'Content-Type': 'application/json; charset=utf-8',
-			'Accept': 'application/json'
-		}
+let _OSB = {
+	protocol: 'http:',
+	host: process.env.host,
+	port: process.env.port, 
+	path: '',
+	method: '',
+	headers: {
+		'Content-Type': 'application/json; charset=utf-8',
+		'Accept': 'application/json'
 	}
+}
 
-	constructor(osb, payload){
-		this.osb.path = osb.path;
-		this.osb.method = osb.method;
-		this.payload = payload;
-	}
+let _osb = (OSB, payload, callback, callbackErr) => {
+	_OSB.path = OSB.path;
+	_OSB.method = OSB.method;
 
-	send( callback, callbackErr ){
-		const req = http.request( this.osb );
-	
-		req.on('response', this.response);
-		req.on('error', this.error);
-		req.write(JSON.stringify( this.payload ));
-		req.end();
-	}
+	const req = http.request(_OSB);
 
-	response( _res ){
-		_res.on('data', ( chunk ) => {
+	const response = (_res) => {
+		_res.on('data', (chunk) => {
 			let response = chunk.toString();
 			console.log(response);
 			response = JSON.parse(response);
@@ -43,11 +31,78 @@ export class OSB{
 		_res.on('end', () => {
 			console.log('**** RESPONSE END ****');
 		});
-	}
+	};
+	const error = (e) => {
+		console.error(`problem with request: ${e.message}`);
+	};
 
-	error( e ){
-		console.error(`problem with request: ${ e.message }`);
-	}
+	req.on('response', response);
+	req.on('error', error);
+	req.write(JSON.stringify(payload));
+	req.end();
 }
 
-export default OSB;
+export default _osb;
+
+
+// import http from 'http';
+// import validate from '../services/validate.service.js';
+
+// class OSB{
+
+// 	constructor(){
+// 		this.payload = {};
+// 		this.osb = {
+// 			protocol: 'http:',
+// 			host: process.env.host,
+// 			port: process.env.port, 
+// 			path: '',
+// 			method: '',
+// 			headers: {
+// 				'Content-Type': 'application/json; charset=utf-8',
+// 				'Accept': 'application/json'
+// 			}
+// 		};
+// 		this.callback;
+// 		this.callbackErr;
+// 	}
+
+// 	send( osb, payload, callback, callbackErr ){
+// 		this.osb.path 		= osb.path;
+// 		this.osb.method 	= osb.method;
+// 		this.payload			= payload;
+// 		this.callback 		= callback;
+// 		this.callbackErr 	= callbackErr;
+		
+// 		this.req = http.request( this.osb );
+	
+// 		console.log('CALLBACK');
+// 		console.log(this.callback);
+
+// 		this.req.on('response', this.response);
+// 		this.req.on('error', this.error);
+// 		this.req.write(JSON.stringify( this.payload ));
+// 		this.req.end();
+// 	}
+
+// 	response( _res ){
+// 		_res.on('data', ( chunk ) => {
+// 			let response = chunk.toString();
+// 			console.log(response);
+// 			response = JSON.parse(response);
+// 			( validate.payment( response ) ) ?
+// 				this.callback( response ) :
+// 				this.callbackErr( response );
+// 		});
+// 		_res.on('end', () => {
+// 			console.log('**** RESPONSE END ****');
+// 		});
+// 	}
+
+// 	error( e ){
+// 		console.error(`problem with request: ${ e.message }`);
+// 	}
+// }
+
+// const _osb = new OSB();
+// export default _osb;

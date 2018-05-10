@@ -9,14 +9,18 @@ import _health from '../services/health.service.js';
 let OPENINFO = {};
 
 /** TESTING */
-let OPENINFO_TEST = {
-	"LINEAPRODUCTO" : "005",
-	"EQUIPO" 				: "",
-	"IMPORTE" 			: "000000001000",
-	"TIPOOPERACION" : "1",
-	"CUPONORIGINAL" : "",
-	"FECHAORIGINAL" : "",
-	"ID_CLIENTE" 		: "00000000072767012368912043 APX_AOGAS                     00145627219                           OPEN ",
+const OPENINFO_TEST = {
+	"IDTRANSACCION" : '403493097',
+	"TIMESPAN" 			: '20180508025750878373000',
+	"TIPOOPERACION" : 'C',
+	"IMPORTE" 			: '000000135899',
+	"CUOTAS" 				: '01',
+	"LINEAPRODUCTO" : '005',
+	"EQUIPO" 				: '000',
+	"CUPONORIGINAL" : '',
+	"FECHAORIGINAL" : '',
+	"TIPOT" 				: '',
+	"ID_CLIENTE" 		: '00000005286955863468205043 TESTING                       000430448365                          OPEN '
 };
 
 // OPENINFO = OPENINFO_TEST;
@@ -26,6 +30,7 @@ let OPENINFO_TEST = {
 // POST request
 function solicitudDePago(req, res){
 	OPENINFO = req.body;
+	console.log( req.body );
 	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
 
@@ -45,6 +50,7 @@ function makeAPayment(req, res){
 			});
 		}
 	} else {
+		console.log('Error de datos de OPEN');
 		res.status(500);
 		res.send('No existe información del cliente');
 	}

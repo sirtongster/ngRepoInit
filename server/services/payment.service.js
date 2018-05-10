@@ -18,7 +18,7 @@ function registroDePagoWS( OPENINFO, CARDINFO, callback_reg ){
 		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
 		_payload_ws.Equipo 								= OPENINFO.EQUIPO;
 		_payload_ws.Importe 							= OPENINFO.IMPORTE;
-		_payload_ws.TipoOperacion 				= OPENINFO.TIPOOPERACION;
+		_payload_ws.TipoOperacion 				= '1';
 		_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL;
 		_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL;
 		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE;
@@ -27,7 +27,7 @@ function registroDePagoWS( OPENINFO, CARDINFO, callback_reg ){
 	osb(OSB, _payload_ws, ( response ) => {
 		registroDePagoOPEN( response.Payment, OPENINFO, CARDINFO , callback_reg);
 	}, ( err ) => {
-		callback( { status: 500, message: err.Payment.Response } );
+		callback_reg( { status: 500, message: (err.Payment.Response) ? err.Payment.Response : 'Error al registrar en WS' } );
 	});
 }
 
@@ -69,13 +69,15 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 	}
 
 	osb(OSB, _payload_op, (response) => {
+
 		callback_reg( { status: 200, message: 'Registro de pago exitoso'} );
-	}, ( err ) => {
-		// anulacionDePagoWS( OPENINFO, CARDINFO, callback_reg );
-		
+
+	}, ( err ) => {	
+
 		anulacionDePagoWS( OPENINFO, CARDINFO, (response) => {
 			callback_reg({ status: response.status, message: `${ err.message } - ${ response.message}` });
 		});
+		
 	});
 
 }

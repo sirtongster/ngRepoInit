@@ -34,7 +34,8 @@ if [ $# = 1 ] ; then
 	docker build -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1 -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA -t sr-docker-xp01.corp.cablevision.com.ar/wondersoft:latest .
 
 # Instancio el container
-	docker run -e host=sr-osb12-ad02 -e port=10001 -d -p 9229:7777 --name wondersoft -v /data/app -w /data/app sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA
+	docker run -e host=estb -e port=8000 -d -p 9229:7777 --name wondersoft -v /data/app -w /data/app sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1
+	docker run -e host=estb -e port=8000 -d -p 9229:7777 --name wondersoft -v /data/app -w /data/app sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1-ALPHA
 
 	rm -R dist
 	
