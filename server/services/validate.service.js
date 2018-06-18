@@ -25,7 +25,7 @@ let validate = {
 		return false;
 	},
 	isAnulment : (info) => {
-		return ( ! info.TIPOOPERACION === 'C') ? true : false;
+		return ( info.TIPOOPERACION !== "C") ? true : false;
 	},
 	isEmptyObject : (obj) => {
 		for (var key in obj) {

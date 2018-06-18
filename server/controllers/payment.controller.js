@@ -12,7 +12,7 @@ let OPENINFO = {};
 const OPENINFO_TEST = {
 	"IDTRANSACCION" : '403493097',
 	"TIMESPAN" 			: '20180508025750878373000',
-	"TIPOOPERACION" : 'C',
+	"TIPOOPERACION" : 'A',
 	"IMPORTE" 			: '000000135899',
 	"CUOTAS" 				: '01',
 	"LINEAPRODUCTO" : '005',
@@ -38,7 +38,7 @@ function makeAPayment(req, res){
 
 	if( !validate.isEmptyObject( OPENINFO )){
 		console.log( OPENINFO );
-		if ( validate.isAnulment(OPENINFO) ){ 
+		if ( validate.isAnulment( OPENINFO ) ){ 
 			payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
 				res.status(data.status);
 				res.send(data.message);

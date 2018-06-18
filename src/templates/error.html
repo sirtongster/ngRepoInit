@@ -1,9 +1,8 @@
 <div class="jumbotron" ng-init="error.init()">
 	<div class="container-fluid">
 		<div class="row">
-			<div id="error">
-				<h3>Psss.. No se pudo realizar el pago!</h3>
-				<p>Probá de nuevo más tarde.</p>
+			<div id="error" >
+				<p ng-bind-html="error.data.message"></p>
 				<a class="btn btn-outline-danger btn-block" ng-href="/home">Volver</a>
 			</div>
 		</div>

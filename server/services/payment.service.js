@@ -27,7 +27,12 @@ function registroDePagoWS( OPENINFO, CARDINFO, callback_reg ){
 	osb(OSB, _payload_ws, ( response ) => {
 		registroDePagoOPEN( response.Payment, OPENINFO, CARDINFO , callback_reg);
 	}, ( err ) => {
-		callback_reg( { status: 500, message: (err.Payment.Response) ? err.Payment.Response : 'Error al registrar en WS' } );
+		callback_reg({
+			status: 500,
+			message: ( err.Payment.Response ) ?
+									err.Payment.Response :
+									'Error al registrar en WS'
+		});
 	});
 }
 
@@ -70,12 +75,18 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 
 	osb(OSB, _payload_op, (response) => {
 
-		callback_reg( { status: 200, message: 'Registro de pago exitoso'} );
+		callback_reg({
+			status: 200,
+			message: 'Registro de pago exitoso'
+		});
 
 	}, ( err ) => {	
 
 		anulacionDePagoWS( OPENINFO, CARDINFO, (response) => {
-			callback_reg({ status: response.status, message: `${ err.message } - ${ response.message}` });
+			callback_reg({
+				status: response.status,
+				message: `${ err.message } - ${ response.message}`
+			});
 		});
 		
 	});
@@ -87,10 +98,10 @@ function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = 'DELETE';
 
-	const load_payload = (()=>{
-		for(let item in CARDINFO){
-			if(_payload_ws.hasOwnProperty(item)){
-				_payload_ws[item] = CARDINFO[item];
+	const load_payload = (() => {
+		for( let item in CARDINFO ){
+			if( _payload_ws.hasOwnProperty(item) ){
+				_payload_ws[item] = CARDINFO[ item ];
 			}
 		}
 		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
@@ -103,11 +114,13 @@ function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
 		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE;
 	})();
 
-
 	osb(OSB, _payload_ws, (response) => {
 		anulacionDePagoOPEN( OPENINFO, callback )
 	}, ( err ) => {
-		callback( { status: 500, message: err.message } );
+		callback({
+			status: 500,
+			message: err.message
+		});
 	});
 }
 
@@ -121,9 +134,15 @@ function anulacionDePagoOPEN( OPENINFO, callback ){
 	_payload_anul_op.paymentDate	= validate._date(  OPENINFO.FECHAORIGINAL, '000000' )	|| "2018-03-21T10:53:59";
 
 	osb(OSB, _payload_anul_op, (response) => {
-		callback( { status: 200, message: 'Pago anulado correctamente'} );
+		callback({
+			status: 200,
+			message: 'Pago anulado correctamente'
+		});
 	}, ( err ) => {
-		callback( { status: 200, message: 'Pago anulado en Wondersoft, pero no en OPEN'} );
+		callback({
+			status: 200,
+			message: 'Pago anulado en Wondersoft, pero no en OPEN'
+		});
 	});
 }
 

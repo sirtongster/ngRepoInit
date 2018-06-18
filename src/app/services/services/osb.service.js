@@ -39,7 +39,7 @@
 			})
 			.catch((e)=>{
 				logger = e;
-				$location.path('/error');
+				$location.path('/error').search({ data: logger.data });
 			})
 			.finally(()=>{
 				console.log(logger);
@@ -56,7 +56,7 @@
 			})
 			.catch((e)=>{
 				logger = e;
-				$location.path('/error');
+				$location.path('/error').search({ data: logger.data });
 			})
 			.finally(()=>{
 				console.log(logger);
