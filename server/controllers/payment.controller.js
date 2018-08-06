@@ -9,21 +9,22 @@ import _health from '../services/health.service.js';
 let OPENINFO = {};
 
 /** TESTING */
-const OPENINFO_TEST = {
-	"IDTRANSACCION" : '403493097',
-	"TIMESPAN" 			: '20180508025750878373000',
-	"TIPOOPERACION" : 'A',
-	"IMPORTE" 			: '000000135899',
-	"CUOTAS" 				: '01',
-	"LINEAPRODUCTO" : '005',
-	"EQUIPO" 				: '000',
-	"CUPONORIGINAL" : '',
-	"FECHAORIGINAL" : '',
-	"TIPOT" 				: '',
-	"ID_CLIENTE" 		: '00000005286955863468205043 TESTING                       000430448365                          OPEN '
+const OPENINFO_TEST = { 
+	"IDTRANSACCION"	: '403713280',
+  "TIMESPAN"			: '20180703035133406448000',
+  "TIPOOPERACION"	: 'A',
+  "IMPORTE"				: '000000010000',
+  "CUOTAS"				: '01',
+  "LINEAPRODUCTO"	: '009',
+  "EQUIPO"				: '4',
+  "CUPONORIGINAL"	: '00000618',
+  "FECHAORIGINAL"	: '03/07/18',
+  "TIPOT"					: '',
+	"ID_CLIENTE"		: '00000005070436113016367043 TESTING                       000418089334                          OPEN '
 };
 
 // OPENINFO = OPENINFO_TEST;
+
 /** END TESTING */
 
 
