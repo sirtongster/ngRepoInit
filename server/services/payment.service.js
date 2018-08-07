@@ -41,7 +41,7 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 	OSB.path = '/paymentManagement/payments/open';
 	OSB.method = 'POST';
 
-	_payload_op.fechaPago 				= validate._date( WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	|| "2018-03-21T10:53:59",
+	_payload_op.fechaPago 				= validate._date( WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime ),
 	_payload_op.lineaProducto 		= WSRESPONSE.ProductLine,
 	_payload_op.comercio 					= WSRESPONSE.Commerce,
 	_payload_op.terminal 					= WSRESPONSE.Terminal,
@@ -53,7 +53,7 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 	_payload_op.anulacion 				= WSRESPONSE.Cancellation,
 	_payload_op.numeroTarjeta 		= WSRESPONSE.CreditCardNumber,
 	_payload_op.fechaVencimiento 	= WSRESPONSE.CreditCardExpirationDate,
-	_payload_op.fechaco 					= validate._date(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime )	|| "2018-03-21T10:53:59",
+	_payload_op.fechaco 					= validate._date(  WSRESPONSE.PurchaseDate, WSRESPONSE.PurchaseTime ),
 	_payload_op.cuta 							= WSRESPONSE.VoucherNumber,
 	_payload_op.auto 							= WSRESPONSE.AuthorizationNumber,
 	_payload_op.tipoauto 					= WSRESPONSE.AuthorizationType,
@@ -105,7 +105,7 @@ function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
 			}
 		}
 		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
-		_payload_ws.Equipo 								= OPENINFO.EQUIPO || '000';
+		_payload_ws.Equipo 								= '';
 		_payload_ws.Importe 							= OPENINFO.IMPORTE;
 		_payload_ws.TipoOperacion 				= ( OPENINFO.TIPOOPERACION === 'D' ) ? '3' : '1';
 		_payload_ws.Anulacion 						= ( OPENINFO.TIPOOPERACION === 'D' ) ? 'N' : 'S';

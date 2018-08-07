@@ -7,3 +7,4 @@ if [ $# = 2 ]; then
 
 else
 	echo "Se debe ingresar el tag de la imagen que desea subir y la version del beta"
+fi
