@@ -1,9 +1,9 @@
 #!/bin/bash
 ## Script para subir una imagen al Docker Hub interno
 
-if [ $# = 3 ] ; then
+if [ $# = 1 ] ; then
 
-	docker login sr-docker-xp01.corp.cablevision.com.ar -u $2 -p $3
+	docker login sr-docker-xp01.corp.cablevision.com.ar
 
 	if [ ! -z $(docker images -q sr-docker-xp01.corp.cablevision.com.ar/wondersoft:$1) ]; then
 
