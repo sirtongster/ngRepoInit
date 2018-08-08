@@ -30,7 +30,10 @@ const OPENINFO_TEST = {
 
 // POST request
 function solicitudDePago(req, res){
+
+	
 	OPENINFO = req.body;
+	OPENINFO.EQUIPO = "";
 	console.log( req.body );
 	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
