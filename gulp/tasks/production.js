@@ -170,6 +170,7 @@ gulp.task('start-dev', [config.nodejs.name], function(){
 
 gulp.task('start-test', [config.nodejs.name], function(){
 	var stream = nodemon({
+		exec: 'node --inspect',
 		script: 'dist/server.js',
 		ext: 'js',
 		env: {

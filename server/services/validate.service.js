@@ -34,6 +34,13 @@ let validate = {
 			}
 		}
 		return true;
+	},
+	toFloat : ( value ) => {
+		if( value.length === 12 ){
+			return parseFloat(value) / 100;
+		} else {
+			return "error";
+		}
 	}
 };
 

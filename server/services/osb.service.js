@@ -8,19 +8,29 @@ let _OSB = {
 	path: '',
 	method: '',
 	headers: {
-		'Content-Type': 'application/json; charset=utf-8',
-		'Accept': 'application/json'
+		'Content-Type': 'application/json'
 	}
 }
+
+delete _OSB.headers["Content-Length"];
 
 let _osb = (OSB, payload, callback, callbackErr) => {
 	_OSB.path = OSB.path;
 	_OSB.method = OSB.method;
 
+	if(_OSB.method === 'DELETE'){
+		_OSB.headers["Content-Length"] = Buffer.byteLength(JSON.stringify(payload, undefined, 2));
+	}
+
+	console.log('**** PAYLOAD ****');
+	console.log(_OSB);
+	console.log('**** PAYLOAD END ****');
+
 	const req = http.request(_OSB);
 
 	const response = (_res) => {
 		_res.on('data', (chunk) => {
+			console.log('**** RESPONSE START ****');
 			let response = chunk.toString();
 			console.log(response);
 			response = JSON.parse(response);
@@ -38,7 +48,10 @@ let _osb = (OSB, payload, callback, callbackErr) => {
 
 	req.on('response', response);
 	req.on('error', error);
-	req.write(JSON.stringify(payload));
+	console.log('***** REQUEST START *****');
+	console.log(JSON.stringify(payload, undefined, 2));
+	console.log('***** REQUEST END *****');
+	req.write(JSON.stringify(payload, undefined, 2));
 	req.end();
 }
 

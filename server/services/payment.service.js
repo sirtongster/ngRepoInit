@@ -9,22 +9,25 @@ function registroDePagoWS( OPENINFO, CARDINFO, callback_reg ){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = 'POST';
 
+	let _payload_ws_reg = _payload_ws;
+
 	const load_payload = (()=>{
 		for(let item in CARDINFO){
-			if(_payload_ws.hasOwnProperty(item)){
-				_payload_ws[item] = CARDINFO[item];
+			if(_payload_ws_reg.hasOwnProperty(item)){
+				_payload_ws_reg[item] = CARDINFO[item];
 			}
 		}
-		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
-		_payload_ws.Equipo 								= OPENINFO.EQUIPO;
-		_payload_ws.Importe 							= OPENINFO.IMPORTE;
-		_payload_ws.TipoOperacion 				= '1';
-		_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL;
-		_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL;
-		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE;
+		_payload_ws_reg.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
+		_payload_ws_reg.Equipo 								= "";
+		_payload_ws_reg.Importe 							= OPENINFO.IMPORTE;
+		_payload_ws_reg.TipoOperacion 				= '1';
+		_payload_ws_reg.Anulacion 						= 'N';
+		_payload_ws_reg.NCuponOriginal 				= OPENINFO.CUPONORIGINAL;
+		_payload_ws_reg.FechaOriginal 				= OPENINFO.FECHAORIGINAL;
+		_payload_ws_reg.IdentificacionCliente = OPENINFO.ID_CLIENTE;
 	})();
 
-	osb(OSB, _payload_ws, ( response ) => {
+	osb(OSB, _payload_ws_reg, ( response ) => {
 		registroDePagoOPEN( response.Payment, OPENINFO, CARDINFO , callback_reg);
 	}, ( err ) => {
 		callback_reg({
@@ -98,30 +101,27 @@ function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
 	OSB.path = '/paymentManagement/paymentCC';
 	OSB.method = 'DELETE';
 
+	let _payload_ws_anul = _payload_ws;
+
 	const load_payload = (() => {
 		for( let item in CARDINFO ){
-			if( _payload_ws.hasOwnProperty(item) ){
-				_payload_ws[item] = CARDINFO[ item ];
+			if( _payload_ws_anul.hasOwnProperty(item) ){
+				_payload_ws_anul[item] = CARDINFO[ item ];
 			}
 		}
-		_payload_ws.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
-		_payload_ws.Equipo 								= '';
-		_payload_ws.Importe 							= OPENINFO.IMPORTE;
-		_payload_ws.TipoOperacion 				= ( OPENINFO.TIPOOPERACION === 'D' ) ? '3' : '1';
-		_payload_ws.Anulacion 						= ( OPENINFO.TIPOOPERACION === 'D' ) ? 'N' : 'S';
-		_payload_ws.NCuponOriginal 				= OPENINFO.CUPONORIGINAL; // TODO: Chequear si viene de OPEN.
-		_payload_ws.FechaOriginal 				= OPENINFO.FECHAORIGINAL; // TODO: Chequear si viene de OPEN.
-		_payload_ws.IdentificacionCliente = OPENINFO.ID_CLIENTE;
-		_payload_ws.Comercio							= OPENINFO.COMERCIO;
-		_payload_ws.Terminal							= OPENINFO.TERMINAL;
+		_payload_ws_anul.LineaProducto 				= OPENINFO.LINEAPRODUCTO;
+		_payload_ws_anul.Equipo 								= "";
+		_payload_ws_anul.Importe 							= OPENINFO.IMPORTE;
+		_payload_ws_anul.TipoOperacion 				= ( OPENINFO.TIPOOPERACION === 'D' ) ? '3' : '1';
+		_payload_ws_anul.Anulacion 						= ( OPENINFO.TIPOOPERACION === 'D' ) ? 'N' : 'S';
+		_payload_ws_anul.NCuponOriginal 				= OPENINFO.CUPONORIGINAL; // TODO: Chequear si viene de OPEN.
+		_payload_ws_anul.FechaOriginal 				= OPENINFO.FECHAORIGINAL; // TODO: Chequear si viene de OPEN.
+		_payload_ws_anul.IdentificacionCliente = OPENINFO.ID_CLIENTE;
+		_payload_ws_anul.Comercio							= OPENINFO.COMERCIO;
+		_payload_ws_anul.Terminal							= ""; // OPENINFO.TERMINAL;
 	})();
 
-	console.log('*****TEST*****TEST*****TEST*****TEST*****');
-	console.log(_payload_ws);
-	console.log('*****TEST*****TEST*****TEST*****TEST*****');
-
-
-	osb(OSB, _payload_ws, (response) => {
+	osb(OSB, _payload_ws_anul, (response) => {
 		anulacionDePagoOPEN( OPENINFO, callback )
 	}, ( err ) => {
 		callback({
@@ -136,8 +136,10 @@ function anulacionDePagoOPEN( OPENINFO, callback ){
 	OSB.path = '/paymentManagement/payments/open';
 	OSB.method = 'DELETE';
 
+	let _payload_anul_op = _payload_op;
+
 	_payload_anul_op.contract 		= OPENINFO.IDTRANSACCION;
-	_payload_anul_op.amount 			= OPENINFO.IMPORTE;
+	_payload_anul_op.amount 			= validate.toFloat( OPENINFO.IMPORTE );
 	_payload_anul_op.paymentDate	= validate._date(  OPENINFO.FECHAORIGINAL, '000000' )	|| "2018-03-21T10:53:59";
 
 	osb(OSB, _payload_anul_op, (response) => {
