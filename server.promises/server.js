@@ -1,12 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import path from 'path';
-import methodOverride from 'method-override';
-
-import colors from 'colors';
-
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const path = require('path');
+const methodOverride = require('method-override');
 const port = process.env.PORT || 7777;
 
 /** SERVER **/
@@ -34,5 +31,5 @@ app.use('/pago', require('./server/routes/routes'));
 
 /** SERVER START **/
 server.listen(port, () => {
-	console.info( `Listening on, server_port ${ port }`.black.bgWhite);
+	console.log( "Listening on, server_port " + port )
 });
