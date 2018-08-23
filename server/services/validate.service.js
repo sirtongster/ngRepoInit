@@ -9,7 +9,6 @@ let validate = {
 		return date+'T'+time;
 	},
 	payment : (info) => {
-		let response;
 		if (info.Payment && info.Payment.ResponseCode){
 			if(info.Payment.ResponseCode === "00"){
 				logger.debug(info, { title: 'contenido del servicio' });

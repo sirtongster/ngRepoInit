@@ -2,56 +2,62 @@ import http from 'http';
 import validate from '../services/validate.service.js';
 import logger from '../services/log.service.js';
 
-let _OSB = {
-	protocol: 'http:',
-	host: process.env.host,
-	port: process.env.port, 
-	path: '',
-	method: '',
-	headers: {
-		'Content-Type': 'application/json'
-	}
-}
 
-delete _OSB.headers["Content-Length"];
-
-let _osb = (OSB, payload, callback, callbackErr) => {
-	_OSB.path = OSB.path;
-	_OSB.method = OSB.method;
-
-	if(_OSB.method === 'DELETE'){
-		_OSB.headers["Content-Length"] = Buffer.byteLength(JSON.stringify(payload, undefined, 2));
-	}
-
-	logger.debug(JSON.stringify(payload, undefined, 2), {
-		title: `${ _OSB.protocol }//${ _OSB.host }:${ _OSB.port }${ _OSB.path }`
-	});
-
-	const req = http.request(_OSB);
-
-	const response = (_res) => {
-		_res.on('data', (chunk) => {
-			let response = chunk.toString();
-			response = JSON.parse(response);
-			( validate.payment( response ) ) ?
-				callback( response ) :
-				callbackErr( response );
+const _osb = (OSB, payload) => {
+	
+	return new Promise( (resolve, reject) => {	
+		let _OSB = {
+			protocol: 'http:',
+			host: process.env.host,
+			port: process.env.port, 
+			path: OSB.path,
+			method: OSB.method,
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}
+		
+		// delete _OSB.headers["Content-Length"];
+	
+		/** LOGGER */
+		logger.debug(_OSB.headers, {title: 'Headers'});
+		logger.debug(payload, {
+			title: `${ _OSB.protocol }//${ _OSB.host }:${ _OSB.port }${ _OSB.path }`
 		});
-		_res.on('end', () => {
-			console.log('**** RESPONSE END ****');
-		});
-	};
-	const error = (e) => {
-		logger.error('', {title: `problem with request: ${ e.message }`});
-	};
+		/** /LOGGER */
+		
+		/** VERIFICAR COMO MODIFICAR ESO */
+		if(_OSB.method === 'DELETE'){
+			_OSB.headers["Content-Length"] = Buffer.byteLength(JSON.stringify(payload, undefined, 2));
+		}
 
-	req.on('response', response);
-	req.on('error', error);
-	logger.debug(JSON.stringify(payload, undefined, 2), {
-		title: `${ _OSB.protocol }//${ _OSB.host }:${ _OSB.port }${ _OSB.path }`
-	});
-	req.write(JSON.stringify(payload, undefined, 2));
-	req.end();
+		const req = http.request(_OSB);
+		const response = (_res) => {			
+			const body = [];
+			if (_res.statusCode < 200 || _res.statusCode > 299) {
+				reject(new Error('Failed to load page, status code: ' + _res.statusCode));
+			}
+
+			_res.on('data', (chunk) => {
+				body.push(chunk);				
+				( validate.payment( JSON.parse(body.join('')) )) ?
+					resolve( body.join('') ) :
+					reject( body.join('') );
+
+			});
+			_res.on('end', () => {
+				resolve( body.join('') );
+			});
+		};
+		const error = ( err ) => {
+			reject( err );
+		};
+
+		req.on('response', response);
+		req.on('error', error);
+		req.write(JSON.stringify(payload, undefined, 2));
+		req.end();
+	})
 }
 
 export default _osb;

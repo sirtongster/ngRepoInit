@@ -4,23 +4,40 @@ import fs 	from 'fs';
 import payment from '../services/payment.service.js';
 import validate from '../services/validate.service.js';
 import osb from '../services/osb.service.js';
+import logger from '../services/log.service.js';
 import _health from '../services/health.service.js';
 
 let OPENINFO = {};
 
 /** TESTING */
+// const OPENINFO_TEST = { 
+// 	"IDTRANSACCION"	: '403767638',
+//   "TIMESPAN"			: '20180816025924276788000',
+//   "TIPOOPERACION"	: 'C',
+//   "IMPORTE"				: '000000010000',
+//   "CUOTAS"				: '01',
+//   "LINEAPRODUCTO"	: '003',
+//   "EQUIPO"				: '000',
+//   "CUPONORIGINAL"	: '00000618',
+//   "FECHAORIGINAL"	: '03/07/18',
+//   "TIPOT"					: '',
+// 	"ID_CLIENTE"		: '00000005070436113016367043 TESTING                       000418089334                          OPEN '
+// };
+
 const OPENINFO_TEST = { 
-	"IDTRANSACCION"	: '403713280',
-  "TIMESPAN"			: '20180703035133406448000',
-  "TIPOOPERACION"	: 'A',
-  "IMPORTE"				: '000000010000',
+	"IDTRANSACCION"	: '403767638',
+  "TIMESPAN"			: '20180816025924276788000',
+  "TIPOOPERACION"	: 'C',
+  "IMPORTE"				: '000000164500',
   "CUOTAS"				: '01',
-  "LINEAPRODUCTO"	: '009',
-  "EQUIPO"				: '4',
-  "CUPONORIGINAL"	: '00000618',
-  "FECHAORIGINAL"	: '03/07/18',
+  "LINEAPRODUCTO"	: '003',
+  "EQUIPO"				: '000',
+  "CUPONORIGINAL"	: '',
+  "FECHAORIGINAL"	: '',
   "TIPOT"					: '',
-	"ID_CLIENTE"		: '00000005070436113016367043 TESTING                       000418089334                          OPEN '
+	"ID_CLIENTE"		: '00000005070436113016367043 TESTING                       000418089334                          OPEN ',
+	"TERMINAL"			: '',
+	"COMERCIO"			: ''
 };
 
 // OPENINFO = OPENINFO_TEST;
@@ -30,18 +47,14 @@ const OPENINFO_TEST = {
 
 // POST request
 function solicitudDePago(req, res){
-
-	
 	OPENINFO = req.body;
-	OPENINFO.EQUIPO = "";
-	console.log( req.body );
 	res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
 
 function makeAPayment(req, res){
 
 	if( !validate.isEmptyObject( OPENINFO )){
-		console.log( OPENINFO );
+		logger.debug( JSON.stringify(OPENINFO, undefined, 2), {title: 'Info de OPEN'} );
 		if ( validate.isAnulment( OPENINFO ) ){ 
 			payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
 				res.status(data.status);
@@ -54,7 +67,7 @@ function makeAPayment(req, res){
 			});
 		}
 	} else {
-		console.log('Error de datos de OPEN');
+		logger.error('', {title: 'Error de datos de OPEN'});
 		res.status(500);
 		res.send('No existe información del cliente');
 	}

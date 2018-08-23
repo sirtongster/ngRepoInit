@@ -40,7 +40,7 @@ const OPENINFO_TEST = {
 	"COMERCIO"			: ''
 };
 
-OPENINFO = OPENINFO_TEST;
+// OPENINFO = OPENINFO_TEST;
 
 /** END TESTING */
 
@@ -54,7 +54,7 @@ function solicitudDePago(req, res){
 function makeAPayment(req, res){
 
 	if( !validate.isEmptyObject( OPENINFO )){
-		logger.debug( JSON.stringify(OPENINFO, undefined, 2), {title: 'Info de OPEN'} );
+		logger.debug( OPENINFO, {title: 'Info de OPEN'} );
 		if ( validate.isAnulment( OPENINFO ) ){ 
 			payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
 				res.status(data.status);

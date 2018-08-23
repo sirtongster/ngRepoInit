@@ -1,5 +1,6 @@
 import http from 'http';
 import validate from '../services/validate.service.js';
+import logger from '../services/log.service.js';
 
 let _OSB = {
 	protocol: 'http:',
@@ -8,21 +9,29 @@ let _OSB = {
 	path: '',
 	method: '',
 	headers: {
-		'Content-Type': 'application/json; charset=utf-8',
-		'Accept': 'application/json'
+		'Content-Type': 'application/json'
 	}
 }
+
+delete _OSB.headers["Content-Length"];
 
 let _osb = (OSB, payload, callback, callbackErr) => {
 	_OSB.path = OSB.path;
 	_OSB.method = OSB.method;
+
+	if(_OSB.method === 'DELETE'){
+		_OSB.headers["Content-Length"] = Buffer.byteLength(JSON.stringify(payload, undefined, 2));
+	}
+
+	logger.debug(JSON.stringify(payload, undefined, 2), {
+		title: `${ _OSB.protocol }//${ _OSB.host }:${ _OSB.port }${ _OSB.path }`
+	});
 
 	const req = http.request(_OSB);
 
 	const response = (_res) => {
 		_res.on('data', (chunk) => {
 			let response = chunk.toString();
-			console.log(response);
 			response = JSON.parse(response);
 			( validate.payment( response ) ) ?
 				callback( response ) :
@@ -33,15 +42,15 @@ let _osb = (OSB, payload, callback, callbackErr) => {
 		});
 	};
 	const error = (e) => {
-		console.error(`problem with request: ${e.message}`);
+		logger.error('', {title: `problem with request: ${ e.message }`});
 	};
 
 	req.on('response', response);
 	req.on('error', error);
-	console.log('*****TEST*****TEST*****TEST*****TEST*****');
-	console.log(JSON.stringify(payload));
-	console.log('*****TEST*****TEST*****TEST*****TEST*****');
-	req.write(JSON.stringify(payload));
+	logger.debug(JSON.stringify(payload, undefined, 2), {
+		title: `${ _OSB.protocol }//${ _OSB.host }:${ _OSB.port }${ _OSB.path }`
+	});
+	req.write(JSON.stringify(payload, undefined, 2));
 	req.end();
 }
 

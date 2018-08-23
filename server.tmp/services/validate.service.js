@@ -1,3 +1,4 @@
+import logger from '../services/log.service.js';
 let validate = {
 	_date :	(date, time) =>{
 		// TODO: Validación de parametros de entrada (date : DD/MM/AA && time : HHMMSS)
@@ -11,17 +12,21 @@ let validate = {
 		let response;
 		if (info.Payment && info.Payment.ResponseCode){
 			if(info.Payment.ResponseCode === "00"){
+				logger.debug(JSON.stringify(info, undefined, 2), { title: 'contenido del servicio' });
 				return true;
 			}
 		} else if( info.errorCode ) {
 			if( info.errorCode === "0" ){
+				logger.debug(JSON.stringify(info, undefined, 2), { title: 'contenido del servicio' });
 				return true;
 			}
 		} else if( info.code ) {
 			if( info.code === "0" ){
+				logger.debug(JSON.stringify(info, undefined, 2), { title: 'contenido del servicio' });
 				return true;
 			}
 		}
+		logger.error(JSON.stringify(info, undefined, 2), { title: 'contenido del servicio' });
 		return false;
 	},
 	isAnulment : (info) => {
@@ -34,6 +39,13 @@ let validate = {
 			}
 		}
 		return true;
+	},
+	toFloat : ( value ) => {
+		if( value.length === 12 ){
+			return parseFloat(value) / 100;
+		} else {
+			return "error";
+		}
 	}
 };
 

@@ -27,16 +27,18 @@ function registroDePagoWS( OPENINFO, CARDINFO, callback_reg ){
 		_payload_ws_reg.IdentificacionCliente = OPENINFO.ID_CLIENTE;
 	})();
 
-	osb(OSB, _payload_ws_reg, ( response ) => {
-		registroDePagoOPEN( response.Payment, OPENINFO, CARDINFO , callback_reg);
-	}, ( err ) => {
-		callback_reg({
-			status: 500,
-			message: ( err.Payment.Response ) ?
+	osb(OSB, _payload_ws_reg)
+		.then( data => {
+			registroDePagoOPEN( data.Payment, OPENINFO, CARDINFO , callback_reg);
+		})
+		.catch( err => {
+			callback_reg({
+				status: 500,
+				message: ( err.Payment.Response ) ?
 									err.Payment.Response :
 									'Error al registrar en WS'
+			});
 		});
-	});
 }
 
 function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
@@ -76,24 +78,21 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO, callback_reg ){
 		}
 	}
 
-	osb(OSB, _payload_op, (response) => {
-
-		callback_reg({
-			status: 200,
-			message: 'Registro de pago exitoso'
-		});
-
-	}, ( err ) => {	
-
-		anulacionDePagoWS( OPENINFO, CARDINFO, (response) => {
+	osb(OSB, _payload_op)
+		.then( data => {
 			callback_reg({
-				status: response.status,
-				message: `${ err.message } - ${ response.message}`
+				status: 200,
+				message: 'Registro de pago exitoso'
+			});
+		})
+		.catch( err => {
+			anulacionDePagoWS( OPENINFO, CARDINFO, (response) => {
+				callback_reg({
+					status: response.status,
+					message: `${ err.message } - ${ response.message}`
+				});
 			});
 		});
-		
-	});
-
 }
 
 function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
@@ -121,14 +120,16 @@ function anulacionDePagoWS( OPENINFO, CARDINFO, callback ){
 		_payload_ws_anul.Terminal							= ""; // OPENINFO.TERMINAL;
 	})();
 
-	osb(OSB, _payload_ws_anul, (response) => {
-		anulacionDePagoOPEN( OPENINFO, callback )
-	}, ( err ) => {
-		callback({
-			status: 500,
-			message: err.message
+	osb(OSB, _payload_ws_anul)
+		.then( data => {
+			anulacionDePagoOPEN( OPENINFO, callback )
+		})
+		.catch( err => {
+			callback({
+				status: 500,
+				message: err.message
+			});
 		});
-	});
 }
 
 function anulacionDePagoOPEN( OPENINFO, callback ){
@@ -143,17 +144,19 @@ function anulacionDePagoOPEN( OPENINFO, callback ){
 	};
 
 
-	osb(OSB, _payload_anul_op, (response) => {
-		callback({
-			status: 200,
-			message: 'Pago anulado correctamente'
+	osb(OSB, _payload_anul_op)
+		.then( data => {
+			callback({
+				status: 200,
+				message: 'Pago anulado correctamente'
+			});
+		})
+		.catch( err => {
+			callback({
+				status: 200,
+				message: 'Pago anulado en Wondersoft, pero no en OPEN'
+			});
 		});
-	}, ( err ) => {
-		callback({
-			status: 200,
-			message: 'Pago anulado en Wondersoft, pero no en OPEN'
-		});
-	});
 }
 
 const data = {

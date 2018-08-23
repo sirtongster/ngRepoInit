@@ -1,4 +1,5 @@
 import colors from 'colors';
+import clansi from 'ansi-256-colors';
 
 let ts;
 
@@ -10,36 +11,36 @@ let logger = {
 	error: 		( data, config ) => {
 		let iconfig = config || {title: ''};
 		console.error('[',logger.timespan().grey,']');
-		console.error(` ERROR `.bgRed, iconfig.title.magenta);
-		console.error(`${ data }`);
+		console.error(clansi.bg.getRgb(5,0,0) + ` ERROR ` + clansi.reset, clansi.fg.getRgb(2,1,5) + iconfig.title + clansi.reset);
+		console.error(`${ JSON.stringify(data, undefined, 2) }`);
 	},
 	warn: 		( data, config ) => {
 		let iconfig = config || {title: ''};
 		console.warn('[',logger.timespan().grey,']');
-		console.warn(` WARN `.bgYellow, iconfig.title.magenta);
-		console.warn(`${ data }`);
+		console.warn(clansi.bg.getRgb(5,1,0) + ` WARN ` + clansi.reset, clansi.fg.getRgb(2,1,5) + iconfig.title + clansi.reset);
+		console.warn(`${ JSON.stringify(data, undefined, 2) }`);
 	},
 	info: 		( data, config ) => {
 		let iconfig = config || {title: ''};
 		console.info('[',logger.timespan().grey,']');
-		console.info(` INFO `.bgCyan, iconfig.title.magenta);
-		console.info(`${ data }`);
+		console.info(clansi.bg.getRgb(0,3,5) + ` INFO ` + clansi.reset, clansi.fg.getRgb(2,1,5) + iconfig.title + clansi.reset);
+		console.info(`${ JSON.stringify(data, undefined, 2) }`);
 	},
 	verbose: 	( data ) => {
 		console.log('[',logger.timespan().grey,']');
-		console.log(`${ data }`);
+		console.log(`${ JSON.stringify(data, undefined, 2) }`);
 	},
 	debug: 		( data, config ) => {
 		let iconfig = config || {title: ''};
 		console.log('[',logger.timespan().grey,']');
-		console.log(` DEBUG `.gray.bgGreen, iconfig.title.magenta);
-		console.log(`${ data }`);
+		console.log(clansi.bg.getRgb(0,2,2) + ` DEBUG ` + clansi.reset, clansi.fg.getRgb(2,1,5) + iconfig.title + clansi.reset);
+		console.log(`${ JSON.stringify(data, undefined, 2) }`);
 	},
 	silly: 		( data, config ) => {
 		let iconfig = config || {title: ''};
 		console.log('[',logger.timespan().grey,']');
-		console.log(` SILLY `.bgMagenta, iconfig.title.magenta);
-		console.log(`${ data }`);
+		console.log(clansi.bg.getRgb(5,5,5) + ` SILLY ` + clansi.reset, clansi.fg.getRgb(2,1,5) + iconfig.title + clansi.reset);
+		console.log(`${ JSON.stringify(data, undefined, 2) }`);
 	}
 }
 
