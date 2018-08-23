@@ -32,31 +32,41 @@ const _osb = (OSB, payload) => {
 		}
 
 		const req = http.request(_OSB);
-		const response = (_res) => {			
+		const response = (_res) => {
 			const body = [];
+			let bodyParsed = "";
 			if (_res.statusCode < 200 || _res.statusCode > 299) {
 				reject(new Error('Failed to load page, status code: ' + _res.statusCode));
 			}
-
+			
 			_res.on('data', (chunk) => {
-				body.push(chunk);				
-				( validate.payment( JSON.parse(body.join('')) )) ?
-					resolve( body.join('') ) :
-					reject( body.join('') );
+				body.push(chunk);
+				bodyParsed = JSON.parse(body.join(''));
 
+				if ( validate.payment( bodyParsed ) ){
+					resolve( bodyParsed );
+				} else {
+					reject( bodyParsed );
+				}
 			});
+
 			_res.on('end', () => {
-				resolve( body.join('') );
+				resolve( JSON.parse(body.join('')) );
 			});
 		};
 		const error = ( err ) => {
 			reject( err );
 		};
+			
+		try {
+			req.on('response', response);
+			req.on('error', error);
+			req.write(JSON.stringify(payload, undefined, 2));
+			req.end();
 
-		req.on('response', response);
-		req.on('error', error);
-		req.write(JSON.stringify(payload, undefined, 2));
-		req.end();
+		} catch( err ){
+			reject({ Payment: { Response: 'Error inesperado en servicio'}});
+		}
 	})
 }
 

@@ -56,15 +56,27 @@ function makeAPayment(req, res){
 	if( !validate.isEmptyObject( OPENINFO )){
 		logger.debug( OPENINFO, {title: 'Info de OPEN'} );
 		if ( validate.isAnulment( OPENINFO ) ){ 
-			payment.anulacionDePagoWS( OPENINFO, req.body, (data) => {
-				res.status(data.status);
-				res.send(data.message);
-			})
+
+			payment.anulacionDePagoWS( OPENINFO, req.body )
+				.then( data => {
+					res.status(data.status);
+					res.send(data.message);
+				})
+				.catch( err => {
+					res.status(err.status);
+					res.send(err.message);
+				});
+
 		} else {
-			payment.registroDePagoWS( OPENINFO, req.body, (data) => {
-				res.status(data.status);
-				res.send(data.message);
-			});
+			payment.registroDePagoWS( OPENINFO, req.body )
+				.then( data => {
+					res.status(data.status);
+					res.send(data.message);
+				})
+				.catch( err => {
+					res.status(err.status);
+					res.send(err.message);
+				});
 		}
 	} else {
 		logger.error('', {title: 'Error de datos de OPEN'});
@@ -84,11 +96,13 @@ function status(req, res){
 		status : ( req.body.status === 'success' ) ? 14 : 0
 	};
 
-	osb(OSB, _payload_st, (response) => {
-		res.send('Servicio cambioDeEstado ejecutado');
-	}, ( err ) => {
-		res.send(err);
-	});
+	osb(OSB, _payload_st)
+		.then( data => {
+			res.send('Servicio cambioDeEstado ejecutado');
+		})
+		.catch( err => {
+			res.send(err);
+		});
 }
 
 function health(){
