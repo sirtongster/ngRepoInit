@@ -43,11 +43,8 @@ const _osb = (OSB, payload) => {
 				body.push(chunk);
 				bodyParsed = JSON.parse(body.join(''));
 
-				if ( validate.payment( bodyParsed ) ){
-					resolve( bodyParsed );
-				} else {
-					reject( bodyParsed );
-				}
+				if ( validate.payment( bodyParsed ) ) resolve( bodyParsed );
+				else reject( bodyParsed );
 			});
 
 			_res.on('end', () => {

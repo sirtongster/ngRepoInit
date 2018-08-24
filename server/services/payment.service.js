@@ -155,7 +155,7 @@ function anulacionDePagoOPEN( OPENINFO ){
 		let _payload_anul_op = {
 			contract 		: OPENINFO.IDTRANSACCION,
 			amount 			: validate.toFloat( OPENINFO.IMPORTE ),
-			paymentDate	: validate._date(  OPENINFO.FECHAORIGINAL, '000000' )	|| "2018-03-21T10:53:59"
+			paymentDate	: anulws_resp.Payment.PurchaseDate
 		};
 	
 	
