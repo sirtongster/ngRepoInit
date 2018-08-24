@@ -51,22 +51,18 @@ const _osb = (OSB, payload) => {
 			});
 
 			_res.on('end', () => {
-				resolve( JSON.parse(body.join('')) );
+				resolve( bodyParsed );
 			});
 		};
 		const error = ( err ) => {
-			reject( err );
+			validate.payment( err );
+			reject({ Payment: { Response: 'Error inesperado en el servicio...' }});
 		};
 			
-		try {
-			req.on('response', response);
-			req.on('error', error);
-			req.write(JSON.stringify(payload, undefined, 2));
-			req.end();
-
-		} catch( err ){
-			reject({ Payment: { Response: 'Error inesperado en servicio'}});
-		}
+		req.on('response', response);
+		req.on('error', error);
+		req.write(JSON.stringify(payload, undefined, 2));
+		req.end();
 	})
 }
 

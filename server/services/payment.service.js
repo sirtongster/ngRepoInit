@@ -29,9 +29,9 @@ function registroDePagoWS( OPENINFO, CARDINFO ){
 			_payload_ws_reg.IdentificacionCliente = OPENINFO.ID_CLIENTE;
 		})();
 	
-		osb(OSB, _payload_ws_reg)
+		return osb(OSB, _payload_ws_reg)
 			.then( data => {
-				registroDePagoOPEN( data.Payment, OPENINFO, CARDINFO)
+				return registroDePagoOPEN( data.Payment, OPENINFO, CARDINFO)
 					.then( ( resolution ) => {
 						resolve( resolution );
 					});
@@ -39,9 +39,7 @@ function registroDePagoWS( OPENINFO, CARDINFO ){
 			.catch( err => {
 				reject({
 					status: 500,
-					message: ( err.Payment.Response ) ?
-										err.Payment.Response :
-										'Error al registrar en WS'
+					message: err.Payment.Response
 				});
 			});
 	});
@@ -85,7 +83,7 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO ){
 			}
 		}
 	
-		osb(OSB, _payload_op)
+		return osb(OSB, _payload_op)
 			.then( data => {
 				resolve({
 					status: 200,
@@ -93,7 +91,7 @@ function registroDePagoOPEN( WSRESPONSE, OPENINFO, CARDINFO ){
 				});
 			})
 			.catch( err => {
-				anulacionDePagoWS( OPENINFO, CARDINFO )
+				return anulacionDePagoWS( OPENINFO, CARDINFO )
 					.then( response => {
 						reject({
 							status: response.status,
@@ -132,9 +130,9 @@ function anulacionDePagoWS( OPENINFO, CARDINFO ){
 			_payload_ws_anul.Terminal							= ""; // OPENINFO.TERMINAL;
 		})();
 	
-		osb(OSB, _payload_ws_anul)
+		return osb(OSB, _payload_ws_anul)
 			.then( data => {
-				anulacionDePagoOPEN( OPENINFO )
+				return anulacionDePagoOPEN( OPENINFO )
 					.then( resolution => {
 						resolve( resolution );
 					})

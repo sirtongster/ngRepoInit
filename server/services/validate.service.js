@@ -1,5 +1,4 @@
 import logger from '../services/log.service.js';
-import { resolve } from 'dns';
 let validate = {
 	_date :	(date, time) =>{
 		// TODO: Validación de parametros de entrada (date : DD/MM/AA && time : HHMMSS)
@@ -10,31 +9,29 @@ let validate = {
 		return date+'T'+time;
 	},
 	payment : (info) => {
-		console.log(info);
-		if (info.Payment){
+		if ( 'Payment' in info ){
 			if(info.Payment.ResponseCode == "00"){
 				logger.debug(info, { title: 'contenido del servicio' });
 				return true;
 			}
-		} else if( info.hasOwnProperty(errorCode)) {
+		} else if( 'errorCode' in info ) {
 			if( info.errorCode == "0" ){
 				logger.debug(info, { title: 'contenido del servicio' });
 				return true;
 			}
-		} else if( info.hasOwnProperty(code)) {
+		} else if( 'code' in info ) {
 			if( info.code == "0" ){
 				logger.debug(info, { title: 'contenido del servicio' });
 				return true;
 			}
-		} else if( info.hasOwnProperty(statusCode)) {
+		} else if( 'statusCode' in info ) {
 			if( info.statusCode == 0 ){
 				logger.debug(info, { title: 'contenido del servicio' });
 				return true;
 			}
-		} else {
-			logger.warn(info, { title: 'contenido del servicio' });
-			return false;
 		}
+		logger.warn(info, { title: 'contenido del servicio' });
+		return false;
 	},
 	isAnulment : (info) => {
 		return ( info.TIPOOPERACION !== "C") ? true : false;
