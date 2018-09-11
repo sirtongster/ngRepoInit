@@ -157,7 +157,7 @@ gulp.task('start-dev', [config.nodejs.name], function(){
 		ext: 'js',
 		env: {
 			'NODE_ENV': 'development',
-			'host': 'sr-osb12-ad02.corp.cablevision.com.ar',
+			'host': 'localhost',
 			'port': '10001'
 		}
 	});
@@ -175,7 +175,7 @@ gulp.task('start-test', [config.nodejs.name], function(){
 		ext: 'js',
 		env: {
 			'NODE_ENV': 'production',
-			'host': 'esbt.corp.cablevision.com.ar',
+			'host': 'localhost',
 			'port': '8000'
 		}
 	});
