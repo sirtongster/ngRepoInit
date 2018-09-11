@@ -1,6 +1,6 @@
 #banners{
 	&>div:first-child{
-		border: 1px solid #ccc;
+		border: 1px solid $main-gray;
 	}
 	.banner{
 		padding: 25px;
@@ -9,7 +9,7 @@
 		.image{
 			max-width: 13em;
 			height: 8em;
-			background-color: #cccccc;
+			background-color: $main-gray;
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;

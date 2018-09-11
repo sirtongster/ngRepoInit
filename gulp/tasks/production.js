@@ -11,10 +11,11 @@ var gulp = require('gulp'),
 	htmlmin = require('gulp-htmlmin'),
 	plumber = require("gulp-plumber"),
 	babel = require('gulp-babel'),
-	nodemon = require('gulp-nodemon');
+	nodemon = require('gulp-nodemon'),
+	ts = require('gulp-typescript');
 
 var config = require('../config');
-
+const tsProject = ts.createProject('tsconfig.json');
 
 /*
  **	Elimina 'dist/'
@@ -23,6 +24,12 @@ gulp.task( config.clean.name, function () {
 	return gulp.src( config.clean.src, {read: false})
 		.pipe( plumber() )
 		.pipe(clean());
+});
+
+gulp.task('scripts', () => {
+  const tsResult = tsProject.src()
+  .pipe(tsProject());
+  return tsResult.js.pipe(gulp.dest('dist'));
 });
 
 /*
@@ -198,6 +205,7 @@ gulp.task('prod', function(callback){
 
 gulp.task('default', function(callback){
 	runSequence(config.clean.name, [
+		'scripts',
 		config.sass.name,
 		config.vendors.name,
 		config.appjs.name,

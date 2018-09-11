@@ -7,13 +7,14 @@
 			<section id="banners">
 				<div
 					ng-include="'../templates/components/banner.html'"
-					ng-repeat="banner in home.listOfBanners"></div>
-			</div>
+					ng-repeat="banner in home.listOfBanners">
+				</div>
+			</section>
 		</div>
 		<div class="col-4">
-			<div id="selecciones">
-				
-			</div>
+			<section id="selection-panel">
+				<div ng-include="'../templates/selection-panel.html'"></div>
+			</section>
 		</div>
 	</div>
 </div>

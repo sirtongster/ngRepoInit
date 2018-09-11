@@ -1,0 +1,29 @@
+#selection-panel{
+	height: 100vh;
+	background-color: $main-gray;
+	.container-custom{
+		padding: 50px;
+		.info{
+			margin-top: 32px;
+    	margin-bottom: 117px;
+		}
+		.buttons{
+			width: 100%;
+			text-align: center;
+			.btn{
+				width: 100%;
+				max-width: 220px;
+				padding: 10px 0;
+				margin: 10px 0;
+				font-size: $font-title;
+				border-radius: 0;
+				&.btn-aprobar{
+					background-color: #a2d39c;
+				}
+				&.btn-rechazar{
+					background-color: #f64b4d;
+				}
+			}
+		}
+	}
+}

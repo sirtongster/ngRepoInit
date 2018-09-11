@@ -12,6 +12,9 @@
     "gulp": "^3.9.1"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/cors": "^2.8.4",
+    "@types/method-override": "0.0.31",
     "ansi-256-colors": "^1.1.0",
     "colors": "^1.3.1",
     "connect": "^3.6.1",
