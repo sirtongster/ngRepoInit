@@ -1,2 +1,19 @@
-
-<div ng-include="'./components/banner.html'"></div>
+<div id="home" class="container">
+	<div class="row">
+		<div class="col-8">
+			<header class="main-header">
+				<h2>Mostrando {{ home.listOfBanners.length }} participaciones</h2>
+			</header>
+			<section id="banners">
+				<div
+					ng-include="'../templates/components/banner.html'"
+					ng-repeat="banner in home.listOfBanners"></div>
+			</div>
+		</div>
+		<div class="col-4">
+			<div id="selecciones">
+				
+			</div>
+		</div>
+	</div>
+</div>

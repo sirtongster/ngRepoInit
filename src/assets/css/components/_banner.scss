@@ -1,0 +1,26 @@
+#banners{
+	&>div:first-child{
+		border: 1px solid #ccc;
+	}
+	.banner{
+		padding: 25px;
+		cursor: pointer;
+		transition: background-color 0.5s ease;
+		.image{
+			max-width: 13em;
+			height: 8em;
+			background-color: #cccccc;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+		.content{
+			h3{
+				font-size: $font-secondary;
+			}
+		}
+		&:hover{
+			background-color: rgba(126, 193, 255, 0.616)
+		}
+	}
+}

@@ -24,16 +24,6 @@
 				templateUrl: 'templates/home.html'
 			})
 			// Other
-			.when('/error', {
-				controller: 'ErrorController',
-				controllerAs: 'error',
-				templateUrl: 'templates/error.html'
-			})
-			.when('/success', {
-				controller: 'SuccessController',
-				controllerAs: 'success',
-				templateUrl: 'templates/success.html'
-			})
 			.otherwise({
 				redirectTo: '/'
 			});
