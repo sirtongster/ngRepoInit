@@ -9,7 +9,7 @@ class Router{
 	public init(express: any) {
 		this.routes = express.Router();
 
-		this.routes.route('/products')
+		this.routes.route('/product/:id?')
 			.get(api.getProducts)
 			.post(api.createProducts)
 			.put(api.editProducts)

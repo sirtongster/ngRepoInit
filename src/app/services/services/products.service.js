@@ -18,7 +18,7 @@
 		return data;
 		/*************************/
 		function getProducts(){
-			const url = `${ host }/api/products`;
+			const url = `${ host }/api/product/`;
 
 			return new Promise( (resolve, reject) => {
 				$http.get(url)

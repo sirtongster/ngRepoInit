@@ -11,20 +11,29 @@
 		
 		// Public Variables
 		vm.listOfBanners = [];
-		vm.selections;
+		vm.selections = 0;
 		// Public Functions
 		vm.init = init;
+		vm.onSelection = onSelection;
 
 		function init(){
 			console.log('init');
 			ProductService.getProducts()
 				.then( (response) => {
-					vm.listOfBanners = response.data.items;
+					vm.listOfBanners = response.data;
 				});
 		}
 
-		function onSelection(){
-			
+		function onSelection($event){
+			const $banner = angular.element($event.currentTarget);
+
+			if($banner.hasClass('border')){
+				vm.selections--;
+				$banner.removeClass('border');
+			} else {
+				vm.selections++;
+				$banner.addClass('border');
+			};
 		}
 	}
 })();
