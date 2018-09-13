@@ -1,7 +1,11 @@
 import mongoose from 'mongoose';
-import { ObjectId } from 'bson';
 
-const product = new mongoose.Schema({
+const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
+
+mongoose.connect('mongodb://localhost/mydb');
+
+const product = new Schema({
 	id: {
 		type: ObjectId,
 		required: true,

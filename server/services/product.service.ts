@@ -1,5 +1,7 @@
+import { IProductItem, IItemsEntity } from '../interfaces/product.interface';
+
 class ProductService{
-	public data: any = {
+	public data: IProductItem = {
 		"total": 4,
 		"items": [
 			{ 
@@ -28,34 +30,39 @@ class ProductService{
 			}
 		]
 	}
-	public items: any[] = [];
+	public list: IItemsEntity[] = [];
 
 	constructor(){}
 
-	public getProducts( id?: number ){
+	public getProducts( id?: number ): Promise<boolean>{
 		return new Promise((resolve: any, reject: any) => {
 			if( id ){
-				this.items.push(this.findProductById( this.data, id));
+				this.list.push(this.findProductById( this.data, id));
 			} else {
-				this.items = this.data.items;
+				this.list = this.data.items;
 			}
-			resolve(this.items);
+			resolve(this.list);
 		});
 	}
 
-	public createProduct( product: any ){
+	public createProduct( product: IItemsEntity ): Promise<boolean>{
+		return new Promise((resolve: any, reject: any) => {
+			
+			// Persistencia de datos
+
+			console.log('Producto creado correctamente con Id: 5');
+			console.log( product );
+			resolve(5);
+		});
+	}
+
+	public editProduct ( id: number, attributes: IItemsEntity ): Promise<boolean>{
 		return new Promise((resolve: any, reject: any) => {
 			// Persistencia de datos
 		});
 	}
 
-	public editProduct (product: any ){
-		return new Promise((resolve: any, reject: any) => {
-			// Persistencia de datos
-		});
-	}
-
-	public deleteProduct( product: any ){
+	public deleteProduct( id: number ): Promise<boolean>{
 		return new Promise((resolve: any, reject: any) => {
 			// Persistencia de datos
 		});

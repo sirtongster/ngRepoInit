@@ -15,6 +15,7 @@
 		// Public Functions
 		vm.init = init;
 		vm.onSelection = onSelection;
+		vm.sendProduct = sendProduct;
 
 		function init(){
 			console.log('init');
@@ -34,6 +35,10 @@
 				vm.selections++;
 				$banner.addClass('border');
 			};
+		}
+
+		function sendProduct(){
+			ProductService.createProduct().then( () => alert('Product created')).catch();
 		}
 	}
 })();
